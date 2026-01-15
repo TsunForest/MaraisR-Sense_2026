@@ -5649,7 +5649,7 @@
 											"font": "Arial;13;0",
 											"left": 845,
 											"top": 477,
-											"width": 341.28173828125,
+											"width": 372.353515625,
 											"height": 13,
 											"text": "«requirement»"
 										},
@@ -5662,9 +5662,9 @@
 											"font": "Arial;13;1",
 											"left": 845,
 											"top": 492,
-											"width": 341.28173828125,
+											"width": 372.353515625,
 											"height": 13,
-											"text": "Vérifier le dépassement du seuil des particules"
+											"text": "Vérifier le dépassement du seuil des particules fines"
 										},
 										{
 											"_type": "LabelView",
@@ -5697,7 +5697,7 @@
 									"font": "Arial;13;0",
 									"left": 840,
 									"top": 472,
-									"width": 351.28173828125,
+									"width": 382.353515625,
 									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGbtwk1J4Od1KY="
@@ -5798,7 +5798,7 @@
 											"font": "Arial;13;0",
 											"left": 845,
 											"top": 515,
-											"width": 341.28173828125,
+											"width": 372.353515625,
 											"height": 13,
 											"text": "id = \"1.1.2\"",
 											"horizontalAlignment": 0,
@@ -5817,25 +5817,25 @@
 											"font": "Arial;13;0",
 											"left": 845,
 											"top": 530,
-											"width": 341.28173828125,
+											"width": 372.353515625,
 											"height": 13,
-											"text": "text = \"Vérification de dépassement du seuil des particules\"",
+											"text": "text = \"Vérification de dépassement du seuil des particules fines\"",
 											"horizontalAlignment": 0,
 											"property": "text",
-											"value": "\"Vérification de dépassement du seuil des particules\""
+											"value": "\"Vérification de dépassement du seuil des particules fines\""
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 840,
 									"top": 510,
-									"width": 351.28173828125,
+									"width": 382.353515625,
 									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 840,
 							"top": 472,
-							"width": 351.28173828125,
+							"width": 382.353515625,
 							"height": 76,
 							"nameCompartment": {
 								"$ref": "AAAAAAGbtwk1J4OcZUk="
@@ -5879,8 +5879,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 868,
-									"top": 434,
+									"left": 876,
+									"top": 435,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -5899,8 +5899,8 @@
 										"$ref": "AAAAAAGbtwk1KIP4Rm8="
 									},
 									"font": "Arial;13;0",
-									"left": 837,
-									"top": 447,
+									"left": 846,
+									"top": 448,
 									"width": 46.97900390625,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -5922,8 +5922,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 883,
-									"top": 409,
+									"left": 891,
+									"top": 408,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -5941,7 +5941,7 @@
 								"$ref": "AAAAAAGbtwk1J4ObGfU="
 							},
 							"lineStyle": 1,
-							"points": "950:471;803:385",
+							"points": "962:471;807:385",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGbtwk1J4OpK7I="
@@ -6465,9 +6465,9 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"left": -1552,
-											"width": 307.08056640625,
+											"width": 338.15234375,
 											"height": 13,
-											"text": "(from Vérifier le dépassement du seuil des particules)"
+											"text": "(from Vérifier le dépassement du seuil des particules fines)"
 										},
 										{
 											"_type": "LabelView",
@@ -7237,8 +7237,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1009,
-									"top": 576,
+									"left": 1017,
+									"top": 575,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -7257,8 +7257,8 @@
 										"$ref": "AAAAAAGbwPs+Knx7YLo="
 									},
 									"font": "Arial;13;0",
-									"left": 971,
-									"top": 578,
+									"left": 979,
+									"top": 575,
 									"width": 46.97900390625,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -7280,8 +7280,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1038,
-									"top": 573,
+									"left": 1046,
+									"top": 574,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -7299,7 +7299,7 @@
 								"$ref": "AAAAAAGbtwk1J4NrVSA="
 							},
 							"lineStyle": 1,
-							"points": "1029:615;1020:548",
+							"points": "1033:615;1031:548",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGbwPs+Knx+5Kw="
@@ -8336,100 +8336,6 @@
 							}
 						},
 						{
-							"_type": "SysMLRefineView",
-							"_id": "AAAAAAGbwSLLNH37vqw=",
-							"_parent": {
-								"$ref": "AAAAAAGbtwk1J4MvgFo="
-							},
-							"model": {
-								"$ref": "AAAAAAGbwSLLM335h2I="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGbwSLLNH38S6Y=",
-									"_parent": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"model": {
-										"$ref": "AAAAAAGbwSLLM335h2I="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 830,
-									"top": 81,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGbwSLLNH39otY=",
-									"_parent": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"model": {
-										"$ref": "AAAAAAGbwSLLM335h2I="
-									},
-									"font": "Arial;13;0",
-									"left": 847,
-									"top": 64,
-									"width": 46.97900390625,
-									"height": 13,
-									"alpha": 1.8925465756359925,
-									"distance": 56.92099788303083,
-									"hostEdge": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"edgePosition": 1,
-									"text": "«refine»"
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGbwSLLNH3+RpE=",
-									"_parent": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"model": {
-										"$ref": "AAAAAAGbwSLLM335h2I="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 801,
-									"top": 82,
-									"height": 13,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGbwSLLNH37vqw="
-									},
-									"edgePosition": 1
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAGbwP6cMnycVqc="
-							},
-							"tail": {
-								"$ref": "AAAAAAGbwSFSm327PH4="
-							},
-							"points": "936:88;816:88;816:128",
-							"showVisibility": true,
-							"nameLabel": {
-								"$ref": "AAAAAAGbwSLLNH38S6Y="
-							},
-							"stereotypeLabel": {
-								"$ref": "AAAAAAGbwSLLNH39otY="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAGbwSLLNH3+RpE="
-							}
-						},
-						{
 							"_type": "SysMLDeriveReqtView",
 							"_id": "AAAAAAGbwSNim34Xr+o=",
 							"_parent": {
@@ -8521,6 +8427,100 @@
 							},
 							"propertyLabel": {
 								"$ref": "AAAAAAGbwSNim34arGY="
+							}
+						},
+						{
+							"_type": "SysMLDeriveReqtView",
+							"_id": "AAAAAAGbwTpEU3408FI=",
+							"_parent": {
+								"$ref": "AAAAAAGbtwk1J4MvgFo="
+							},
+							"model": {
+								"$ref": "AAAAAAGbwTpEU34ypeU="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGbwTpEU341FIg=",
+									"_parent": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"model": {
+										"$ref": "AAAAAAGbwTpEU34ypeU="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 918,
+									"top": 57,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"edgePosition": 1
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGbwTpEU342sZg=",
+									"_parent": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"model": {
+										"$ref": "AAAAAAGbwTpEU34ypeU="
+									},
+									"font": "Arial;13;0",
+									"left": 815,
+									"top": 71,
+									"width": 77.3271484375,
+									"height": 13,
+									"alpha": -1.2977877280293928,
+									"distance": 51.92301994298868,
+									"hostEdge": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"edgePosition": 1,
+									"text": "«deriveReqt»"
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGbwTpEU343opo=",
+									"_parent": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"model": {
+										"$ref": "AAAAAAGbwTpEU34ypeU="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 889,
+									"top": 58,
+									"height": 13,
+									"alpha": -1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGbwTpEU3408FI="
+									},
+									"edgePosition": 1
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGbwP6cMnycVqc="
+							},
+							"tail": {
+								"$ref": "AAAAAAGbwSFSm327PH4="
+							},
+							"points": "936:64;904:64;904:128",
+							"showVisibility": true,
+							"nameLabel": {
+								"$ref": "AAAAAAGbwTpEU341FIg="
+							},
+							"stereotypeLabel": {
+								"$ref": "AAAAAAGbwTpEU342sZg="
+							},
+							"propertyLabel": {
+								"$ref": "AAAAAAGbwTpEU343opo="
 							}
 						}
 					]
@@ -8870,7 +8870,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGbtwk1J4MuC4A="
 					},
-					"name": "Vérifier le dépassement du seuil des particules",
+					"name": "Vérifier le dépassement du seuil des particules fines",
 					"ownedElements": [
 						{
 							"_type": "SysMLRefine",
@@ -8937,7 +8937,7 @@
 						}
 					],
 					"id": "1.1.2",
-					"text": "Vérification de dépassement du seuil des particules"
+					"text": "Vérification de dépassement du seuil des particules fines"
 				},
 				{
 					"_type": "SysMLRequirement",
@@ -9063,6 +9063,19 @@
 						{
 							"_type": "SysMLRefine",
 							"_id": "AAAAAAGbwSLLM335h2I=",
+							"_parent": {
+								"$ref": "AAAAAAGbwSFSm325pl8="
+							},
+							"source": {
+								"$ref": "AAAAAAGbwSFSm325pl8="
+							},
+							"target": {
+								"$ref": "AAAAAAGbwP6cMnyafBo="
+							}
+						},
+						{
+							"_type": "SysMLDeriveReqt",
+							"_id": "AAAAAAGbwTpEU34ypeU=",
 							"_parent": {
 								"$ref": "AAAAAAGbwSFSm325pl8="
 							},
