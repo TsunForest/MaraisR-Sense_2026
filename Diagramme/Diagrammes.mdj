@@ -36,9 +36,9 @@
 										"$ref": "AAAAAAGb1b1BCfTbhBw="
 									},
 									"font": "Arial;20;0",
-									"left": 44.537109375,
+									"left": 47.90625,
 									"top": 13,
-									"width": 246.439453125,
+									"width": 272.259765625,
 									"height": 20,
 									"text": "Diagramme_exigence_couleur"
 								},
@@ -51,7 +51,7 @@
 									"font": "Arial;20;1",
 									"left": 13,
 									"top": 13,
-									"width": 26.537109375,
+									"width": 29.90625,
 									"height": 20,
 									"text": "req"
 								}
@@ -3813,9 +3813,9 @@
 										"$ref": "AAAAAAGb1b2if/lie/M="
 									},
 									"font": "Arial;20;0",
-									"left": 36.537109375,
+									"left": 39.90625,
 									"top": 5,
-									"width": 176.46875,
+									"width": 195.541015625,
 									"height": 20,
 									"text": "Diagramme_exigence"
 								},
@@ -3828,7 +3828,7 @@
 									"font": "Arial;20;1",
 									"left": 5,
 									"top": 5,
-									"width": 26.537109375,
+									"width": 29.90625,
 									"height": 20,
 									"text": "req"
 								}
@@ -7132,7 +7132,7 @@
 											"left": 1037,
 											"top": 44,
 											"width": 207,
-											"height": 13,
+											"height": 26,
 											"text": "Communiquer de manière sécurisée",
 											"wordWrap": true
 										},
@@ -7168,7 +7168,7 @@
 									"left": 1032,
 									"top": 24,
 									"width": 217,
-									"height": 38,
+									"height": 51,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb1b2igvpES7c="
 									},
@@ -7267,7 +7267,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1037,
-											"top": 67,
+											"top": 80,
 											"width": 207,
 											"height": 13,
 											"text": "id = \"1.3.1\"",
@@ -7286,7 +7286,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1037,
-											"top": 82,
+											"top": 95,
 											"width": 207,
 											"height": 26,
 											"text": "text = \"Communiquer les mesures avec un chiffrement\"",
@@ -7298,7 +7298,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 1032,
-									"top": 62,
+									"top": 75,
 									"width": 217,
 									"height": 51
 								}
@@ -18680,17 +18680,18 @@
 									"model": {
 										"$ref": "AAAAAAGb4PpeMSSU8ec="
 									},
-									"visible": false,
 									"font": "Arial;13;0",
-									"left": 627,
+									"left": 605,
 									"top": 564,
+									"width": 44.41455078125,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
 									"hostEdge": {
 										"$ref": "AAAAAAGb4PpeMCOjIVQ="
 									},
-									"edgePosition": 1
+									"edgePosition": 1,
+									"text": "+MQTT"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -20791,7 +20792,7 @@
 											"left": 353,
 											"top": 127,
 											"width": 115,
-											"height": 13,
+											"height": 26,
 											"text": "Module de mesure",
 											"wordWrap": true
 										},
@@ -20830,7 +20831,7 @@
 									"left": 348,
 									"top": 120,
 									"width": 125,
-									"height": 25,
+									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb4PpeMCQTgLw="
 									},
@@ -21559,7 +21560,7 @@
 											"left": 1033,
 											"top": 127,
 											"width": 115,
-											"height": 13,
+											"height": 26,
 											"text": "Module de mesure",
 											"wordWrap": true
 										},
@@ -21598,7 +21599,7 @@
 									"left": 1028,
 									"top": 120,
 									"width": 125,
-									"height": 25,
+									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb4PpeMCQ7FBg="
 									},
@@ -23337,6 +23338,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGb4PpeMSSTdyg="
 							},
+							"name": "MQTT",
 							"end1": {
 								"_type": "UMLAssociationEnd",
 								"_id": "AAAAAAGb4PpeMSSVowo=",
@@ -23826,7 +23828,7 @@
 							"left": 648,
 							"top": 40,
 							"width": 424,
-							"height": 721,
+							"height": 745,
 							"nameLabel": {
 								"$ref": "AAAAAAGcBN5k084Ppjo="
 							}
@@ -23865,7 +23867,7 @@
 							"left": 400,
 							"top": 40,
 							"width": 249,
-							"height": 721,
+							"height": 745,
 							"nameLabel": {
 								"$ref": "AAAAAAGcBN7Qb84Zt7Y="
 							}
@@ -23913,7 +23915,7 @@
 							"left": 1072,
 							"top": 40,
 							"width": 337,
-							"height": 721,
+							"height": 745,
 							"nameLabel": {
 								"$ref": "AAAAAAGcBN/eHs4ie4o="
 							}
@@ -25189,7 +25191,7 @@
 							"left": 96,
 							"top": 40,
 							"width": 304,
-							"height": 721,
+							"height": 745,
 							"nameLabel": {
 								"$ref": "AAAAAAGcBS1BO9DhISI="
 							}
@@ -27316,6 +27318,36 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAGcRucb0LPAmdQ="
 							}
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGcRxQj45ukmYk=",
+							"_parent": {
+								"$ref": "AAAAAAGcBK64381a/qg="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGcBO0yu8/DhMA="
+							},
+							"tail": {
+								"$ref": "AAAAAAGcBOX+nM5kkF8="
+							},
+							"points": "1000:336;1000:160;1152:160"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAGcRxX73JuzcbE=",
+							"_parent": {
+								"$ref": "AAAAAAGcBK64381a/qg="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGcRti8T6sEsRw="
+							},
+							"tail": {
+								"$ref": "AAAAAAGcRtK5Lapo29A="
+							},
+							"points": "1192:576;1192:768;252:768;252:442"
 						}
 					]
 				}
