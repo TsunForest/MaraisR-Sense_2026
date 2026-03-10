@@ -3813,9 +3813,9 @@
 										"$ref": "AAAAAAGb1b2if/lie/M="
 									},
 									"font": "Arial;20;0",
-									"left": 36.537109375,
+									"left": 39.90625,
 									"top": 5,
-									"width": 176.46875,
+									"width": 195.541015625,
 									"height": 20,
 									"text": "Diagramme_exigence"
 								},
@@ -3828,7 +3828,7 @@
 									"font": "Arial;20;1",
 									"left": 5,
 									"top": 5,
-									"width": 26.537109375,
+									"width": 29.90625,
 									"height": 20,
 									"text": "req"
 								}
@@ -3887,7 +3887,7 @@
 											"top": 316,
 											"width": 284.66064453125,
 											"height": 13,
-											"text": "Mesurer les taux de particules fines et solvant"
+											"text": "Mesurer les indicateurs de qualité de l'air"
 										},
 										{
 											"_type": "LabelView",
@@ -4027,32 +4027,13 @@
 											"horizontalAlignment": 0,
 											"property": "id",
 											"value": "\"1.2\""
-										},
-										{
-											"_type": "SysMLPropertyValueCompartmentItemView",
-											"_id": "AAAAAAGb1b2if/lx0wM=",
-											"_parent": {
-												"$ref": "AAAAAAGb1b2if/lvhII="
-											},
-											"model": {
-												"$ref": "AAAAAAGb1b2igvpdD5g="
-											},
-											"font": "Arial;13;0",
-											"left": 29,
-											"top": 354,
-											"width": 284.66064453125,
-											"height": 13,
-											"text": "text = \"Mesure des taux  \"",
-											"horizontalAlignment": 0,
-											"property": "text",
-											"value": "\"Mesure des taux  \""
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 24,
 									"top": 334,
 									"width": 294.66064453125,
-									"height": 38
+									"height": 23
 								}
 							],
 							"font": "Arial;13;0",
@@ -5741,7 +5722,7 @@
 											"font": "Arial;13;0",
 											"left": 13,
 											"top": 613,
-											"width": 117.025390625,
+											"width": 176.96630859375,
 											"height": 13,
 											"text": "«requirement»"
 										},
@@ -5754,7 +5735,7 @@
 											"font": "Arial;13;1",
 											"left": 13,
 											"top": 628,
-											"width": 117.025390625,
+											"width": 176.96630859375,
 											"height": 13,
 											"text": "Capteur de solvant"
 										},
@@ -5789,7 +5770,7 @@
 									"font": "Arial;13;0",
 									"left": 8,
 									"top": 608,
-									"width": 127.025390625,
+									"width": 186.96630859375,
 									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb1b2igfnl+2Y="
@@ -5890,26 +5871,45 @@
 											"font": "Arial;13;0",
 											"left": 13,
 											"top": 651,
-											"width": 117.025390625,
+											"width": 176.96630859375,
 											"height": 13,
 											"text": "id = \"1.2.1.1\"",
 											"horizontalAlignment": 0,
 											"property": "id",
 											"value": "\"1.2.1.1\""
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentItemView",
+											"_id": "AAAAAAGc14W9LtVExl4=",
+											"_parent": {
+												"$ref": "AAAAAAGb1b2igfnt41M="
+											},
+											"model": {
+												"$ref": "AAAAAAGb1b2igvpqwaQ="
+											},
+											"font": "Arial;13;0",
+											"left": 13,
+											"top": 666,
+											"width": 176.96630859375,
+											"height": 13,
+											"text": "text = \"REF : SEN-CCS811V1\"",
+											"horizontalAlignment": 0,
+											"property": "text",
+											"value": "\"REF : SEN-CCS811V1\""
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 8,
 									"top": 646,
-									"width": 127.025390625,
-									"height": 23
+									"width": 186.96630859375,
+									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 8,
 							"top": 608,
-							"width": 127.025390625,
-							"height": 61,
+							"width": 186.96630859375,
+							"height": 76,
 							"nameCompartment": {
 								"$ref": "AAAAAAGb1b2igfnk3tw="
 							},
@@ -5958,7 +5958,7 @@
 												"$ref": "AAAAAAGb1b2igfnwenY="
 											},
 											"font": "Arial;13;0",
-											"left": 173,
+											"left": 221,
 											"top": 613,
 											"width": 166.8798828125,
 											"height": 13,
@@ -5971,7 +5971,7 @@
 												"$ref": "AAAAAAGb1b2igfnwenY="
 											},
 											"font": "Arial;13;1",
-											"left": 173,
+											"left": 221,
 											"top": 628,
 											"width": 166.8798828125,
 											"height": 13,
@@ -5985,7 +5985,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -1728,
+											"left": -1632,
 											"width": 338.15234375,
 											"height": 13,
 											"text": "(from Vérifier le dépassement du seuil des particules fines)"
@@ -5998,13 +5998,13 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -1728,
+											"left": -1632,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 168,
+									"left": 216,
 									"top": 608,
 									"width": 176.8798828125,
 									"height": 38,
@@ -6032,7 +6032,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -864,
+									"left": -816,
 									"width": 10,
 									"height": 10
 								},
@@ -6047,7 +6047,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -864,
+									"left": -816,
 									"width": 10,
 									"height": 10
 								},
@@ -6062,7 +6062,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -864,
+									"left": -816,
 									"width": 10,
 									"height": 10
 								},
@@ -6077,7 +6077,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -864,
+									"left": -816,
 									"width": 10,
 									"height": 10
 								},
@@ -6101,7 +6101,7 @@
 												"$ref": "AAAAAAGb1b2ig/p2XrU="
 											},
 											"font": "Arial;13;0",
-											"left": 173,
+											"left": 221,
 											"top": 651,
 											"width": 166.8798828125,
 											"height": 13,
@@ -6109,20 +6109,39 @@
 											"horizontalAlignment": 0,
 											"property": "id",
 											"value": "\"1.2.1.2\""
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentItemView",
+											"_id": "AAAAAAGc14YpD9VIkQo=",
+											"_parent": {
+												"$ref": "AAAAAAGb1b2igfn5gD4="
+											},
+											"model": {
+												"$ref": "AAAAAAGb1b2ig/p2XrU="
+											},
+											"font": "Arial;13;0",
+											"left": 221,
+											"top": 666,
+											"width": 166.8798828125,
+											"height": 13,
+											"text": "text = \"REF : SDS1011\"",
+											"horizontalAlignment": 0,
+											"property": "text",
+											"value": "\"REF : SDS1011\""
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 168,
+									"left": 216,
 									"top": 646,
 									"width": 176.8798828125,
-									"height": 23
+									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
-							"left": 168,
+							"left": 216,
 							"top": 608,
 							"width": 176.8798828125,
-							"height": 61,
+							"height": 76,
 							"nameCompartment": {
 								"$ref": "AAAAAAGb1b2igfnwenY="
 							},
@@ -6171,9 +6190,9 @@
 												"$ref": "AAAAAAGb1b2igfn8sRQ="
 											},
 											"font": "Arial;13;0",
-											"left": 45,
+											"left": 21,
 											"top": 445,
-											"width": 254.515625,
+											"width": 307.2646484375,
 											"height": 13,
 											"text": "«requirement»"
 										},
@@ -6184,11 +6203,11 @@
 												"$ref": "AAAAAAGb1b2igfn8sRQ="
 											},
 											"font": "Arial;13;1",
-											"left": 45,
+											"left": 21,
 											"top": 460,
-											"width": 254.515625,
+											"width": 307.2646484375,
 											"height": 13,
-											"text": "Mesurer les indicateurs de qualité de l'air"
+											"text": "Mesurer les taux de particules fines et solvants"
 										},
 										{
 											"_type": "LabelView",
@@ -6198,7 +6217,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -144,
+											"left": -192,
 											"width": 161.103515625,
 											"height": 13,
 											"text": "(from Diagramme exigence)"
@@ -6211,15 +6230,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -144,
+											"left": -192,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 40,
+									"left": 16,
 									"top": 440,
-									"width": 264.515625,
+									"width": 317.2646484375,
 									"height": 38,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb1b2igfn9/Ds="
@@ -6245,7 +6264,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -104,
 									"width": 10,
 									"height": 10
 								},
@@ -6260,7 +6279,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -104,
 									"width": 10,
 									"height": 10
 								},
@@ -6275,7 +6294,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -104,
 									"width": 10,
 									"height": 10
 								},
@@ -6290,7 +6309,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -80,
+									"left": -104,
 									"width": 10,
 									"height": 10
 								},
@@ -6314,27 +6333,46 @@
 												"$ref": "AAAAAAGb1b2ig/p9sJs="
 											},
 											"font": "Arial;13;0",
-											"left": 45,
+											"left": 21,
 											"top": 483,
-											"width": 254.515625,
+											"width": 307.2646484375,
 											"height": 13,
 											"text": "id = \"1.2.1\"",
 											"horizontalAlignment": 0,
 											"property": "id",
 											"value": "\"1.2.1\""
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentItemView",
+											"_id": "AAAAAAGc14bd+dVQ26Y=",
+											"_parent": {
+												"$ref": "AAAAAAGb1b2igfoF/9M="
+											},
+											"model": {
+												"$ref": "AAAAAAGb1b2ig/p9sJs="
+											},
+											"font": "Arial;13;0",
+											"left": 21,
+											"top": 498,
+											"width": 307.2646484375,
+											"height": 13,
+											"text": "text = \"Mesure des taux\"",
+											"horizontalAlignment": 0,
+											"property": "text",
+											"value": "\"Mesure des taux\""
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 40,
+									"left": 16,
 									"top": 478,
-									"width": 264.515625,
-									"height": 23
+									"width": 317.2646484375,
+									"height": 38
 								}
 							],
 							"font": "Arial;13;0",
-							"left": 40,
+							"left": 16,
 							"top": 440,
-							"width": 264.515625,
+							"width": 317.2646484375,
 							"height": 80,
 							"nameCompartment": {
 								"$ref": "AAAAAAGb1b2igfn8sRQ="
@@ -6378,8 +6416,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 155,
-									"top": 398,
+									"left": 157,
+									"top": 399,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -6398,8 +6436,8 @@
 										"$ref": "AAAAAAGb1b2ig/p+1qA="
 									},
 									"font": "Arial;13;0",
-									"left": 117,
-									"top": 398,
+									"left": 119,
+									"top": 399,
 									"width": 46.97900390625,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -6421,8 +6459,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 184,
-									"top": 399,
+									"left": 186,
+									"top": 398,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6440,7 +6478,7 @@
 								"$ref": "AAAAAAGb1b2igfn7r+U="
 							},
 							"lineStyle": 1,
-							"points": "171:439;170:372",
+							"points": "173:439;171:372",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGb1b2igfoIS9c="
@@ -6450,196 +6488,6 @@
 							},
 							"propertyLabel": {
 								"$ref": "AAAAAAGb1b2igfoK1Jo="
-							}
-						},
-						{
-							"_type": "SysMLDeriveReqtView",
-							"_id": "AAAAAAGb1b2igfoLdOs=",
-							"_parent": {
-								"$ref": "AAAAAAGb1b2if/lhCso="
-							},
-							"model": {
-								"$ref": "AAAAAAGb1b2ig/puUvs="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoM0jw=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/puUvs="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 104,
-									"top": 548,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoN7tg=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/puUvs="
-									},
-									"font": "Arial;13;0",
-									"left": 53,
-									"top": 540,
-									"width": 77.3271484375,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"edgePosition": 1,
-									"text": "«deriveReqt»"
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoO8jA=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/puUvs="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 129,
-									"top": 565,
-									"height": 13,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoLdOs="
-									},
-									"edgePosition": 1
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAGb1b2igfn7r+U="
-							},
-							"tail": {
-								"$ref": "AAAAAAGb1b2igfnjkds="
-							},
-							"lineStyle": 1,
-							"points": "90:607;145:520",
-							"showVisibility": true,
-							"nameLabel": {
-								"$ref": "AAAAAAGb1b2igfoM0jw="
-							},
-							"stereotypeLabel": {
-								"$ref": "AAAAAAGb1b2igfoN7tg="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAGb1b2igfoO8jA="
-							}
-						},
-						{
-							"_type": "SysMLDeriveReqtView",
-							"_id": "AAAAAAGb1b2igfoPOBU=",
-							"_parent": {
-								"$ref": "AAAAAAGb1b2if/lhCso="
-							},
-							"model": {
-								"$ref": "AAAAAAGb1b2ig/p5K/w="
-							},
-							"subViews": [
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoQb0U=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/p5K/w="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 202,
-									"top": 564,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"edgePosition": 1
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoRAO4=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/p5K/w="
-									},
-									"font": "Arial;13;0",
-									"left": 151,
-									"top": 571,
-									"width": 77.3271484375,
-									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"edgePosition": 1,
-									"text": "«deriveReqt»"
-								},
-								{
-									"_type": "EdgeLabelView",
-									"_id": "AAAAAAGb1b2igfoS+QA=",
-									"_parent": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"model": {
-										"$ref": "AAAAAAGb1b2ig/p5K/w="
-									},
-									"visible": false,
-									"font": "Arial;13;0",
-									"left": 229,
-									"top": 549,
-									"height": 13,
-									"alpha": -1.5707963267948966,
-									"distance": 15,
-									"hostEdge": {
-										"$ref": "AAAAAAGb1b2igfoPOBU="
-									},
-									"edgePosition": 1
-								}
-							],
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAGb1b2igfn7r+U="
-							},
-							"tail": {
-								"$ref": "AAAAAAGb1b2igfnvJhU="
-							},
-							"lineStyle": 1,
-							"points": "239:607;193:520",
-							"showVisibility": true,
-							"nameLabel": {
-								"$ref": "AAAAAAGb1b2igfoQb0U="
-							},
-							"stereotypeLabel": {
-								"$ref": "AAAAAAGb1b2igfoRAO4="
-							},
-							"propertyLabel": {
-								"$ref": "AAAAAAGb1b2igfoS+QA="
 							}
 						},
 						{
@@ -7132,7 +6980,7 @@
 											"left": 1037,
 											"top": 44,
 											"width": 207,
-											"height": 13,
+											"height": 26,
 											"text": "Communiquer de manière sécurisée",
 											"wordWrap": true
 										},
@@ -7168,7 +7016,7 @@
 									"left": 1032,
 									"top": 24,
 									"width": 217,
-									"height": 38,
+									"height": 51,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGb1b2igvpES7c="
 									},
@@ -7267,7 +7115,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1037,
-											"top": 67,
+											"top": 80,
 											"width": 207,
 											"height": 13,
 											"text": "id = \"1.3.1\"",
@@ -7286,7 +7134,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1037,
-											"top": 82,
+											"top": 95,
 											"width": 207,
 											"height": 26,
 											"text": "text = \"Communiquer les mesures avec un chiffrement\"",
@@ -7298,7 +7146,7 @@
 									],
 									"font": "Arial;13;0",
 									"left": 1032,
-									"top": 62,
+									"top": 75,
 									"width": 217,
 									"height": 51
 								}
@@ -8918,6 +8766,196 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAGb/y+/cYStLYE="
 							}
+						},
+						{
+							"_type": "SysMLSatisfyView",
+							"_id": "AAAAAAGc14TwVtUjZ/s=",
+							"_parent": {
+								"$ref": "AAAAAAGb1b2if/lhCso="
+							},
+							"model": {
+								"$ref": "AAAAAAGc14TwVtUh6wA="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14TwVtUk0wg=",
+									"_parent": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14TwVtUh6wA="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 122,
+									"top": 550,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"edgePosition": 1
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14TwVtUljiQ=",
+									"_parent": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14TwVtUh6wA="
+									},
+									"font": "Arial;13;0",
+									"left": 83,
+									"top": 544,
+									"width": 51.3017578125,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"edgePosition": 1,
+									"text": "«satisfy»"
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14TwVtUmom0=",
+									"_parent": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14TwVtUh6wA="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 149,
+									"top": 563,
+									"height": 13,
+									"alpha": -1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14TwVtUjZ/s="
+									},
+									"edgePosition": 1
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGb1b2igfn7r+U="
+							},
+							"tail": {
+								"$ref": "AAAAAAGb1b2igfnjkds="
+							},
+							"lineStyle": 1,
+							"points": "117:607;156:520",
+							"showVisibility": true,
+							"nameLabel": {
+								"$ref": "AAAAAAGc14TwVtUk0wg="
+							},
+							"stereotypeLabel": {
+								"$ref": "AAAAAAGc14TwVtUljiQ="
+							},
+							"propertyLabel": {
+								"$ref": "AAAAAAGc14TwVtUmom0="
+							}
+						},
+						{
+							"_type": "SysMLSatisfyView",
+							"_id": "AAAAAAGc14T8Y9U05Vg=",
+							"_parent": {
+								"$ref": "AAAAAAGb1b2if/lhCso="
+							},
+							"model": {
+								"$ref": "AAAAAAGc14T8Y9Uy1Xs="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14T8Y9U1cn8=",
+									"_parent": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14T8Y9Uy1Xs="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 227,
+									"top": 566,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"edgePosition": 1
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14T8ZNU25cg=",
+									"_parent": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14T8Y9Uy1Xs="
+									},
+									"font": "Arial;13;0",
+									"left": 190,
+									"top": 575,
+									"width": 51.3017578125,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"edgePosition": 1,
+									"text": "«satisfy»"
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGc14T8ZNU3JTE=",
+									"_parent": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"model": {
+										"$ref": "AAAAAAGc14T8Y9Uy1Xs="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"left": 250,
+									"top": 547,
+									"height": 13,
+									"alpha": -1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGc14T8Y9U05Vg="
+									},
+									"edgePosition": 1
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAGb1b2igfn7r+U="
+							},
+							"tail": {
+								"$ref": "AAAAAAGb1b2igfnvJhU="
+							},
+							"lineStyle": 1,
+							"points": "273:607;206:520",
+							"showVisibility": true,
+							"nameLabel": {
+								"$ref": "AAAAAAGc14T8Y9U1cn8="
+							},
+							"stereotypeLabel": {
+								"$ref": "AAAAAAGc14T8ZNU25cg="
+							},
+							"propertyLabel": {
+								"$ref": "AAAAAAGc14T8ZNU3JTE="
+							}
 						}
 					]
 				},
@@ -8994,7 +9032,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGb1b2igvpXB38="
 							},
-							"name": "Mesurer les taux de particules fines et solvant",
+							"name": "Mesurer les indicateurs de qualité de l'air",
 							"ownedElements": [
 								{
 									"_type": "UMLConstraint",
@@ -9005,8 +9043,7 @@
 									"name": "Constraint1"
 								}
 							],
-							"id": "1.2",
-							"text": "Mesure des taux  "
+							"id": "1.2"
 						},
 						{
 							"_type": "SysMLRequirement",
@@ -9203,9 +9240,23 @@
 									"target": {
 										"$ref": "AAAAAAGb1b2ig/p9sJs="
 									}
+								},
+								{
+									"_type": "SysMLSatisfy",
+									"_id": "AAAAAAGc14TwVtUh6wA=",
+									"_parent": {
+										"$ref": "AAAAAAGb1b2igvpqwaQ="
+									},
+									"source": {
+										"$ref": "AAAAAAGb1b2igvpqwaQ="
+									},
+									"target": {
+										"$ref": "AAAAAAGb1b2ig/p9sJs="
+									}
 								}
 							],
-							"id": "1.2.1.1"
+							"id": "1.2.1.1",
+							"text": "REF : SEN-CCS811V1"
 						}
 					],
 					"id": "1.1.1",
@@ -9337,9 +9388,23 @@
 									"target": {
 										"$ref": "AAAAAAGb1b2ig/p9sJs="
 									}
+								},
+								{
+									"_type": "SysMLSatisfy",
+									"_id": "AAAAAAGc14T8Y9Uy1Xs=",
+									"_parent": {
+										"$ref": "AAAAAAGb1b2ig/p2XrU="
+									},
+									"source": {
+										"$ref": "AAAAAAGb1b2ig/p2XrU="
+									},
+									"target": {
+										"$ref": "AAAAAAGb1b2ig/p9sJs="
+									}
 								}
 							],
-							"id": "1.2.1.2"
+							"id": "1.2.1.2",
+							"text": "REF : SDS1011"
 						}
 					],
 					"id": "1.1.2",
@@ -9389,7 +9454,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGb1b2if/lg4zg="
 					},
-					"name": "Mesurer les indicateurs de qualité de l'air",
+					"name": "Mesurer les taux de particules fines et solvants",
 					"ownedElements": [
 						{
 							"_type": "SysMLRefine",
@@ -9405,7 +9470,8 @@
 							}
 						}
 					],
-					"id": "1.2.1"
+					"id": "1.2.1",
+					"text": "Mesure des taux"
 				},
 				{
 					"_type": "SysMLRequirement",
