@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 Client MQTT pour UNIHIKER + publication mesures capteurs.
-JSON : {"timestamp": "...", "eco2": 400, "tvoc": 20}
+JSON : {"timestamp": "...", "mesure" : {"ECO2":eco2,"TVOC":tvoc}}
 """
 import json
 import time
 from datetime import datetime
 import paho.mqtt.client as mqtt
+import uuid
 
 class MQTT:
-    def __init__(self, broker="172.16.4.35", port=1883, topic="marais/sondes/MAC/00:e0:4c:d1:72:81",
-                 client_id="00:e0:4c:d1:72:81", username=None, password=None):
+    def __init__(self, broker="marais2026.btssn.ovh", port=1883, topic_base="marais/sondes/",
+                 username="marais2026", password="hyrome49#"):
+        mac_int = uuid.getnode()
+        mac_str = ':'.join(['{:02x}'.format((mac_int >> i) & 0xff) for i in range(0,48,8)][::-1]).upper()
+
         self.broker = broker
         self.port = port
-        self.topic = topic
-        self.client_id = client_id
+        self.topic = topic_base + mac_str
+        self.client_id = mac_str
         self.username = username
         self.password = password
         self.client = None
@@ -36,7 +40,7 @@ class MQTT:
 
     def publish_measure(self, eco2, tvoc):
         ts = datetime.now().isoformat()
-        payload = {"timestamp": ts, "eco2": eco2, "tvoc": tvoc}
+        payload = { "timestamp": ts, "mesure" : {"ECO2":eco2,"TVOC":tvoc}}
         msg = json.dumps(payload)
 
         result = self.client.publish(self.topic, msg)
@@ -50,4 +54,4 @@ class MQTT:
         if self.client:
             self.client.loop_stop()
             self.client.disconnect()
-            print("MQTT déconnecté")
+        print("MQTT déconnecté")
