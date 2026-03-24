@@ -7,14 +7,7 @@ class Controller():
 
     def __init__(self):
         self.capteur = CapteurParticules()
-        self.mqtt = EnvoiMesures(
-            broker="marais2026.btssn.ovh", 
-            port=1883,
-            topic="marais/sondes/62:03:57:41:38:23",
-            client_id="62:03:57:41:38:23",
-            username="marais2026", 
-            password="hyrome49#"
-        )
+        self.mqtt = EnvoiMesures()
     
     def prise_mesure_et_envoi(self):
         capteur = self.capteur
