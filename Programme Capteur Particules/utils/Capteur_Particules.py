@@ -25,7 +25,7 @@ class CapteurParticules(SDS011):
         return pm10
 
     def reconnecter(self):
-        """Ferme proprement le port puis attend la reconnexion."""
+        # Ferme proprement le port puis attend la reconnexion.
         print("Attente du capteur sur /dev/ttyUSB0")
 
         # Forcer la fermeture pour libérer le verrou

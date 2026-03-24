@@ -9,8 +9,8 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 
 class EnvoiMesures:
-    def __init__(self, broker="********* port=1883, topic="marais/sondes/62:03:57:41:38:23",
-                 client_id="62:03:57:41:38:23", username="*****", password="*****"):
+    def __init__(self, broker="marais2026.btssn.ovh", port=1883, topic="marais/sondes/62:03:57:41:38:23",
+                 client_id="62:03:57:41:38:23", username="marais2026", password="hyrome49#"):
         self.__broker: str = broker
         self.__port: int = port
         self.__topic: str = topic
