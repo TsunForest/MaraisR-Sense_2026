@@ -1,4 +1,4 @@
-from utils import Controller
+from Controller import Controller
 
 
 if __name__ == "__main__":

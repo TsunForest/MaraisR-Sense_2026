@@ -1,24 +1,26 @@
 import time
-from utils import Ccs811, MQTT
+from utils import MesureTVOC_CO2, MQTT
 
 def main():
-    ccs811 = Ccs811()
-    ccs811.ccs811_init()
-
-    mqtt = MQTT(broker="172.16.4.35", topic="marais/sondes/a2:c4:cb:3d:e9:1a")
-
-    print("CO2/TVOC + MQTT (1 msg/min)")
+    mqtt = MQTT()
+    capteur = MesureTVOC_CO2()
 
     try:
         while True:
-            if ccs811.data_ready():
-                eco2, tvoc = ccs811.read_eco2_tvoc()
-                print(f"eCO2: {eco2}ppm TVOC: {tvoc}ppb")
+            mesures = capteur.get_mesures()
+
+            if mesures is None:
+                # Pas de données à envoyer (run-in, capteur absent, pas prêt)
+                print("ATTENTE / AUCUNE DONNEE VALIDE")
+            else:
+                eco2, tvoc = mesures
+                print(f"eCO2:{eco2} TVOC:{tvoc}")
                 mqtt.publish_measure(eco2, tvoc)
-            time.sleep(60)
+
+            time.sleep(60)  # 1 mesure par minute
 
     except KeyboardInterrupt:
-        print("Arrêt")
+        print("Arret")
     finally:
         mqtt.disconnect()
 
