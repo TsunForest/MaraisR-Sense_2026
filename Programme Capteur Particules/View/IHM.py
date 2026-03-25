@@ -1,4 +1,3 @@
-from utils import CapteurParticules
 import kivy
 import time
 
