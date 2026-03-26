@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# Model/Envoi_Mesures.py
 """
 Client MQTT pour UNIHIKER + publication mesures capteurs.
 JSON : {"timestamp": "2024-06-01T12:00:00", "mesure": {"pm10": 42.5}}
