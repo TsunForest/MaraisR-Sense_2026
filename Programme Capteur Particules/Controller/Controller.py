@@ -24,7 +24,7 @@ class Controller():
     
     def prise_mesure_et_envoi(self):
 
-        print("PM10 (1 msg/min)")
+        print("PM10 (0,5 msg/min)")
 
         try:
             while True:

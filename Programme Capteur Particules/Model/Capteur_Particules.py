@@ -12,16 +12,16 @@ class CapteurParticules(SDS011):
     def get_pm10(self):
         for i in range(2):
             self.sleep(sleep=False)
-        time.sleep(15)
+        time.sleep(30)
 
         result = self.query()
         
         if result is None:
-            raise serial.SerialException("Pas de réponse du capteur (débranché ?)")
+            raise serial.SerialException("Pas de réponse du capteur")
 
         _, pm10 = result
         self.sleep()
-        time.sleep(44)
+        time.sleep(89)
         
         return pm10
 
