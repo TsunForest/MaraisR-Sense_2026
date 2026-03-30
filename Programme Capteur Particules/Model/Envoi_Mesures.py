@@ -10,7 +10,7 @@ import paho.mqtt.client as mqtt
 
 class EnvoiMesures:
     def __init__(self, broker="marais2026.btssn.ovh", port=1883, topic="marais/sondes/62:03:57:41:38:23",
-                 client_id="62:03:57:41:38:23", username="marais2026", password="hyrome49#"):
+                 client_id="62:03:57:41:38:23", username="*****", password="*****"):
         self.__broker: str = broker
         self.__port: int = port
         self.__topic: str = topic
@@ -36,7 +36,7 @@ class EnvoiMesures:
 
     def publish_measure(self, pm10):
         ts = datetime.now().isoformat()
-        payload = {"timestamp": ts, "mesure": {"pm10": pm10}}
+        payload = {"timestamp": ts, "mesure": {"PM10": pm10}}
         msg = json.dumps(payload)
 
         result = self.__client.publish(self.__topic, msg)
