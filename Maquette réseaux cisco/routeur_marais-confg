@@ -1,13 +1,11 @@
 
 !
-! Last configuration change at 08:26:18 UTC Mon Mar 23 2026
-!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname Router
+hostname routeur_marais
 !
 boot-start-marker
 boot-end-marker
@@ -29,6 +27,7 @@ no aaa new-model
 !
 !
 !
+ip domain name maraisrsense.local
 ip cef
 no ipv6 cef
 multilink bundle-name authenticated
@@ -39,10 +38,12 @@ cts logging verbose
 license udi pid CISCO1941/K9 sn FCZ2040B06C
 !
 !
+username admin privilege 15 secret 5 $1$oKfa$a4Uo3n707fm3EX4ScltnT0
 !
 redundancy
 !
 !
+ip ssh version 2
 !
 !
 !
@@ -100,8 +101,8 @@ line 2
  transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
  stopbits 1
 line vty 0 4
- login
- transport input none
+ login local
+ transport input ssh
 !
 scheduler allocate 20000 1000
 !
