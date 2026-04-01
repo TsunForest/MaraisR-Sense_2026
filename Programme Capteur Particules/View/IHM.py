@@ -9,12 +9,12 @@ Retour automatique à l'accueil après AUTO_RETURN_DELAY secondes.
 
 # ── Config Kivy AVANT tout import kivy ───────────────────────────────────────
 from kivy.config import Config
-Config.set('graphics', 'width', '240')
-Config.set('graphics', 'height', '320')
-Config.set('graphics', 'rotation', '90')
+Config.set('graphics', 'width',      '240')
+Config.set('graphics', 'height',     '320')
+Config.set('graphics', 'rotation',   '90')
 Config.set('graphics', 'fullscreen', '0')
-Config.set('graphics', 'show_cursor', '1')
-Config.set('kivy', 'keyboard_mode', 'system')
+Config.set('graphics', 'show_cursor','1')
+Config.set('kivy',     'keyboard_mode', 'system')
 
 import kivy
 kivy.require('2.1.0')
@@ -35,6 +35,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 # ── Constantes ────────────────────────────────────────────────────────────────
 AUTO_RETURN_DELAY  = 60     # secondes avant retour accueil automatique
 GPIO_POLL_INTERVAL = 0.5   # secondes entre deux lectures des boutons
+DEBOUNCE_DELAY     = 1    # secondes minimum entre deux appuis valides
 
 SEUIL_VERT   = 25.0
 SEUIL_ORANGE = 50.0
@@ -265,6 +266,9 @@ class IHM(App):
         # Mémorise l'état précédent pour détecter le front (appui = True→False)
         self._prev_a = False
         self._prev_b = False
+        # Timestamps du dernier appui validé (debounce)
+        self._last_press_a = 0.0
+        self._last_press_b = 0.0
         Window.clearcolor = C_GRIS
 
     # ── Build ─────────────────────────────────────────────────────────────────
@@ -313,23 +317,31 @@ class IHM(App):
     def _poll_buttons(self, dt):
         """
         Lit l'état des boutons à chaque tick Clock.
-        Déclenche l'action sur le front montant (False → True = appui).
+        Déclenche l'action sur le front montant (False → True = appui)
+        avec debounce : un appui n'est accepté que si DEBOUNCE_DELAY secondes
+        se sont écoulées depuis le dernier appui validé.
         """
         if self._btn_a is None:
             return
         try:
+            import time
+            now = time.monotonic()
             a = self._btn_a.is_pressed()
             b = self._btn_b.is_pressed()
 
-            # Front montant bouton A : False → True
+            # Front montant bouton A + debounce
             if a and not self._prev_a:
-                target = 'accueil' if self.sm.current == 'seuils' else 'seuils'
-                self._go(target)
+                if now - self._last_press_a >= DEBOUNCE_DELAY:
+                    self._last_press_a = now
+                    target = 'accueil' if self.sm.current == 'seuils' else 'seuils'
+                    self._go(target)
 
-            # Front montant bouton B : False → True
+            # Front montant bouton B + debounce
             if b and not self._prev_b:
-                target = 'accueil' if self.sm.current == 'reseau' else 'reseau'
-                self._go(target)
+                if now - self._last_press_b >= DEBOUNCE_DELAY:
+                    self._last_press_b = now
+                    target = 'accueil' if self.sm.current == 'reseau' else 'reseau'
+                    self._go(target)
 
             self._prev_a, self._prev_b = a, b
 
