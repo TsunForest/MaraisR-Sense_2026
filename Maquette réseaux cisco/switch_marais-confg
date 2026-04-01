@@ -1,0 +1,198 @@
+
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname switch_marais
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username admin privilege 15 secret 5 $1$SQWg$4TWV0qTlXYXdmfdWl4gbs0
+no aaa new-model
+system mtu routing 1500
+ip subnet-zero
+ip routing
+ip domain-name marairsens.local
+no ip dhcp use vrf connected
+!
+ip dhcp pool vlan255
+   network 192.168.55.0 255.255.255.0
+   default-router 192.168.55.1 
+   dns-server 1.1.1.1 1.0.0.1 
+!
+ip dhcp pool vlan372
+   network 192.168.72.0 255.255.255.0
+   default-router 192.168.72.1 
+   dns-server 1.1.1.1 1.0.0.1 
+!
+ip dhcp pool vlan488
+   network 192.168.88.0 255.255.255.0
+   default-router 192.168.88.1 
+   dns-server 1.1.1.1 1.0.0.1 
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-1365891456
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1365891456
+ revocation-check none
+ rsakeypair TP-self-signed-1365891456
+!
+!
+crypto pki certificate chain TP-self-signed-1365891456
+ certificate self-signed 01
+  30820256 308201BF A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31333635 38393134 3536301E 170D3933 30333031 30303030 
+  35385A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 33363538 
+  39313435 3630819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100AE63 3843C3A1 DECAE6D5 295BBC96 82A38F6F C2522418 8A48921A 5D2528EC 
+  4B21F3DA 47503E0E 0CC3D466 6ED56686 EB3E6ED7 A34C208E 880A2326 9BA0947C 
+  51CF0ED7 54EF3849 E9E1DA15 4387DF4A 3617174F B39C4DAF F8032CB5 E23C182C 
+  B3322269 1C6AE94C 61BE82C5 ECD507CC 491D289A A5B77B0A 78A4ADAF 89C631E2 
+  6CDF0203 010001A3 7E307C30 0F060355 1D130101 FF040530 030101FF 30290603 
+  551D1104 22302082 1E737769 7463685F 6D617261 69732E6D 61726169 7273656E 
+  732E6C6F 63616C30 1F060355 1D230418 30168014 2FB9F319 BBB1E544 A6156D7F 
+  58D165A3 C1FE9921 301D0603 551D0E04 1604142F B9F319BB B1E544A6 156D7F58 
+  D165A3C1 FE992130 0D06092A 864886F7 0D010104 05000381 81001B82 49A34D9C 
+  84F2F1A4 9A703168 03F39981 711AE40D A195AB60 EBB0624F 71A1026E 1CB3B2F1 
+  4C5EE673 BE017AF7 51B9678B F15BA0F4 2ACCF1A6 77976FFE EF1A61DA E295E412 
+  FFA91F0C 4097ED97 187DD972 09F2B8EB 7DF0AC2F D264673A 80F50B7E 175E3DB6 
+  0EB32DDE 2466DA67 0556405B EB19008C 3F611DAF E8A3BF9E EE80
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree etherchannel guard misconfig
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh version 2
+!
+!
+interface FastEthernet0/1
+ switchport access vlan 255
+ switchport mode access
+!
+interface FastEthernet0/2
+ switchport access vlan 488
+ switchport mode access
+!
+interface FastEthernet0/3
+ switchport access vlan 372
+ switchport mode access
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+ no switchport
+ ip address 10.0.0.2 255.255.255.0
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan255
+ ip address 192.168.55.1 255.255.255.0
+ ip access-group ACL_ARTISAN in
+!
+interface Vlan372
+ ip address 192.168.72.1 255.255.255.0
+!
+interface Vlan488
+ ip address 192.168.88.1 255.255.255.0
+ ip access-group ACL_SONDES in
+!
+ip default-gateway 192.168.1.1
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.0.0.1
+ip http server
+ip http secure-server
+!
+ip access-list extended ACL_ARTISAN
+ deny   ip 192.168.55.0 0.0.0.255 192.168.88.0 0.0.0.255
+ permit udp host 0.0.0.0 any eq bootps
+ permit icmp 192.168.55.0 0.0.0.255 any
+ permit tcp 192.168.55.0 0.0.0.255 any eq www
+ permit tcp 192.168.55.0 0.0.0.255 any eq 443
+ permit udp 192.168.55.0 0.0.0.255 any eq 443
+ permit tcp 192.168.55.0 0.0.0.255 any eq 1883
+ permit tcp 192.168.55.0 0.0.0.255 any eq 8883
+ permit udp 192.168.55.0 0.0.0.255 any eq domain
+ deny   ip any any
+ip access-list extended ACL_SONDES
+ deny   ip 192.168.88.0 0.0.0.255 192.168.55.0 0.0.0.255
+ permit udp host 0.0.0.0 any eq bootps
+ permit icmp 192.168.88.0 0.0.0.255 any
+ permit tcp 192.168.88.0 0.0.0.255 any eq www
+ permit tcp 192.168.88.0 0.0.0.255 any eq 443
+ permit udp 192.168.88.0 0.0.0.255 any eq domain
+ permit tcp 192.168.88.0 0.0.0.255 any eq 1883
+ permit tcp 192.168.88.0 0.0.0.255 any eq 8883
+ deny   ip any any
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end
