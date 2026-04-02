@@ -1,0 +1,311 @@
+#: kivy 2.1.0
+# View/ihm.kv
+# ─────────────────────────────────────────────────────────────────────────────
+# Toute la mise en page de l'IHM. Les propriétés Kivy définies en Python
+# (StringProperty, ListProperty, NumericProperty, BooleanProperty) sont
+# bindées automatiquement ici.
+#   - root  → widget courant (AccueilScreen, SeuilsScreen…)
+#   - app   → instance IHM (App) → donne accès à app.seuil_vert / app.seuil_orange
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉCRAN 1 – Accueil
+# ══════════════════════════════════════════════════════════════════════════════
+<AccueilScreen>:
+    # Fond gris clair
+    canvas.before:
+        Color:
+            rgba: 0.82, 0.82, 0.82, 1
+        Rectangle:
+            pos:  self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding:  [6, 6, 6, 4]
+        spacing:  5
+
+        # ── En-tête : titre à gauche, horloge à droite ────────────────────────
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint:   1, None
+            height:      24
+
+            Label:
+                text:      "[b]Taux de particules dans l'air[/b]"
+                markup:    True
+                font_size: '12sp'
+                halign:    'left'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+                size_hint: 0.60, 1
+
+            Label:
+                text:      root.time_text
+                font_size: '12sp'
+                halign:    'right'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+                size_hint: 0.40, 1
+
+        # ── Bloc mesure : fond coloré selon le seuil, texte centré ───────────
+        BoxLayout:
+            orientation: 'vertical'
+            padding:     [16, 0, 16, 0]
+
+            canvas.before:
+                Color:
+                    rgba: root.pm10_color
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+
+            # Valeur + état en un seul label centré (markup pour tailles mixtes)
+            Label:
+                markup:    True
+                text:
+                    '[size=26sp][b]' + root.val_text + '[/b][/size]\n' \
+                    + '[size=12sp]' + root.state_text + '[/size]'
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉCRAN 2 – Seuils configurés  (bouton A)
+# ══════════════════════════════════════════════════════════════════════════════
+<SeuilsScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.82, 0.82, 0.82, 1
+        Rectangle:
+            pos:  self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding:     8
+        spacing:     8
+
+        Label:
+            text:      '[b]Seuils configurés[/b]'
+            markup:    True
+            font_size: '15sp'
+            color:     0, 0, 0, 1
+            size_hint: 1, None
+            height:    28
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size
+
+        # Seuil vert
+        BoxLayout:
+            size_hint: 1, None
+            height:    55
+            padding:   8
+            canvas.before:
+                Color:
+                    rgba: 0.13, 0.86, 0.13, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+            Label:
+                markup:    True
+                text:      '[b]Seuil 1 — Vert[/b]\nPM10 < ' + str(int(app.seuil_vert)) + ' µg/m³'
+                font_size: '13sp'
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+
+        # Seuil orange
+        BoxLayout:
+            size_hint: 1, None
+            height:    55
+            padding:   8
+            canvas.before:
+                Color:
+                    rgba: 1.0, 0.60, 0.0, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+            Label:
+                markup:    True
+                text:
+                    '[b]Seuil 2 — Orange[/b]\nPM10  ' \
+                    + str(int(app.seuil_vert)) + ' – ' \
+                    + str(int(app.seuil_orange)) + ' µg/m³'
+                font_size: '13sp'
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+
+        # Seuil rouge
+        BoxLayout:
+            size_hint: 1, None
+            height:    55
+            padding:   8
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.15, 0.15, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+            Label:
+                markup:    True
+                text:      '[b]Seuil 3 — Rouge[/b]\nPM10 ≥ ' + str(int(app.seuil_orange)) + ' µg/m³'
+                font_size: '13sp'
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+                color:     0, 0, 0, 1
+
+        Label:
+            text:      '[i]Retour auto dans 60 s   (bouton A = basculer)[/i]'
+            markup:    True
+            font_size: '10sp'
+            color:     0.35, 0.35, 0.35, 1
+            size_hint: 1, None
+            height:    16
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉCRAN 3 – Configuration réseau  (bouton B)
+# ══════════════════════════════════════════════════════════════════════════════
+<ReseauScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.82, 0.82, 0.82, 1
+        Rectangle:
+            pos:  self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding:     8
+        spacing:     10
+
+        Label:
+            text:      '[b]Configuration réseau[/b]'
+            markup:    True
+            font_size: '15sp'
+            color:     0, 0, 0, 1
+            size_hint: 1, None
+            height:    28
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size
+
+        # Adresse IP
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint:   1, None
+            height:      72
+            padding:     10
+            canvas.before:
+                Color:
+                    rgba: 0.35, 0.35, 0.35, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+            Label:
+                text:      'Adresse IP'
+                font_size: '12sp'
+                bold:      True
+                color:     1, 1, 1, 1
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+            Label:
+                text:      root.ip_text
+                font_size: '15sp'
+                color:     1, 1, 1, 1
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+
+        # Adresse MAC
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint:   1, None
+            height:      72
+            padding:     10
+            canvas.before:
+                Color:
+                    rgba: 0.35, 0.35, 0.35, 1
+                Rectangle:
+                    pos:  self.pos
+                    size: self.size
+            Label:
+                text:      'Adresse MAC'
+                font_size: '12sp'
+                bold:      True
+                color:     1, 1, 1, 1
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+            Label:
+                text:      root.mac_text
+                font_size: '15sp'
+                color:     1, 1, 1, 1
+                halign:    'center'
+                valign:    'middle'
+                text_size: self.size
+
+        Label:
+            text:      '[i]Retour auto dans 60 s   (bouton B = basculer)[/i]'
+            markup:    True
+            font_size: '10sp'
+            color:     0.35, 0.35, 0.35, 1
+            size_hint: 1, None
+            height:    16
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# POPUP — overlay semi-transparent centré par-dessus tout écran
+# ══════════════════════════════════════════════════════════════════════════════
+<PopupOverlay>:
+    # Visible uniquement si is_visible == True
+    opacity:   1 if self.is_visible else 0
+
+    # Fond arrondi sombre
+    canvas.before:
+        Color:
+            rgba: 0.10, 0.10, 0.10, 0.88
+        RoundedRectangle:
+            pos:    self.pos
+            size:   self.size
+            radius: [12]
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding:     [14, 10, 14, 10]
+        spacing:     6
+
+        Label:
+            text:      root.titre
+            font_size: '13sp'
+            bold:      True
+            color:     1.0, 0.4, 0.4, 1
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size
+
+        Label:
+            text:      root.message
+            font_size: '11sp'
+            color:     1, 1, 1, 1
+            halign:    'center'
+            valign:    'middle'
+            text_size: self.size

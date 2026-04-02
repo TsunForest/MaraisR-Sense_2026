@@ -1,5 +1,5 @@
 # Model/__init__.py
 from .Capteur_Particules import CapteurParticules
-from .Envoi_Mesures import EnvoiMesures
+from .MQTTClient import MQTTClient
 
-__all__ = ['CapteurParticules', 'EnvoiMesures']
+__all__ = ['CapteurParticules', 'MQTTClient']
