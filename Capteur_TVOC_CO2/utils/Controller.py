@@ -1,7 +1,8 @@
 import time
 from utils import MesureTVOC_CO2, MQTT
 
-def main():
+Class Controller():
+
     mqtt = MQTT()
     capteur = MesureTVOC_CO2()
 
@@ -17,12 +18,9 @@ def main():
                 print(f"eCO2:{eco2} TVOC:{tvoc}")
                 mqtt.publish_measure(eco2, tvoc)
 
-            time.sleep(1200)  # 1 mesure par minute
+            time.sleep(60)  # 1 mesure par minute
 
     except KeyboardInterrupt:
         print("Arret")
     finally:
         mqtt.disconnect()
-
-if __name__ == "__main__":
-    main()
