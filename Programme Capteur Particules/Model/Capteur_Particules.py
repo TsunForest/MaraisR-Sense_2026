@@ -1,57 +1,122 @@
 # Model/Capteur_Particules.py
+"""
+Modèle du capteur de particules fines SDS011 — partie Model MVC.
+
+Le SDS011 est un capteur laser qui mesure les particules PM2.5 et PM10
+en µg/m³. Il communique via port série USB (UART).
+
+Ce module étend la classe SDS011 de la bibliothèque sds011 pour ajouter :
+  - Une séquence de mesure adaptée (wake-up + stabilisation + sleep)
+  - Une procédure de reconnexion automatique en cas de débranchement
+"""
+
 from sds011 import SDS011
 import time
 import serial
 
+
 class CapteurParticules(SDS011):
+    """
+    Encapsule le capteur SDS011 avec une logique de mesure périodique et
+    de reconnexion automatique.
+
+    Héritage de SDS011 : donne accès aux méthodes sleep(), query(), etc.
+    et à l'attribut self.ser (objet serial.Serial sous-jacent).
+    """
+
     def __init__(self, port="/dev/ttyUSB0"):
-        self._port = port
+        """
+        Initialise la connexion série avec le capteur SDS011.
+
+        :param port: Port série USB (valeur par défaut adaptée à l'UNIHIKER).
+        :raises serial.SerialException: Si le port n'est pas accessible.
+        :raises OSError: Si le périphérique est introuvable.
+        """
+        self._port = port   # conservé pour la méthode reconnecter()
         super().__init__(port, use_query_mode=True)
+        # Timeout série de 5 s : évite un blocage infini si le capteur ne répond pas
         self.ser.timeout = 5
-    
-    def get_pm10(self):
-        for i in range(2):
+
+    def get_pm10(self) -> float:
+        """
+        Effectue une mesure PM10 complète selon la séquence recommandée :
+          1. Sortie du mode sleep (x2 pour s'assurer du réveil)
+          2. Attente de 30 s pour stabiliser le laser et le flux d'air
+          3. Requête de mesure
+          4. Remise en sleep pour économiser la durée de vie du capteur
+          5. Attente de 89 s avant la prochaine mesure possible
+             (cycle total ≈ 2 min → 0.5 mesure/min)
+
+        :return: Valeur PM10 en µg/m³.
+        :raises serial.SerialException: Si le capteur ne répond pas (débranchement).
+        """
+        # Double appel sleep(False) pour être sûr que le capteur est bien réveillé
+        for _ in range(2):
             self.sleep(sleep=False)
+
+        # Stabilisation : le laser et le ventilateur doivent tourner avant mesure
         time.sleep(30)
 
+        # Requête de mesure : retourne (pm25, pm10) ou None si pas de réponse
         result = self.query()
-        
-        if result is None:
-            raise serial.SerialException("Pas de réponse du capteur")
 
-        _, pm10 = result
+        if result is None:
+            # Aucune réponse dans le délai timeout → capteur probablement débranché
+            raise serial.SerialException("Pas de réponse du capteur SDS011")
+
+        _, pm10 = result   # on ignore pm25, on ne garde que pm10
+
+        # Remise en veille du capteur pour économiser la durée de vie du laser
         self.sleep()
+
+        # Pause avant la prochaine mesure (cycle total ~2 min avec les 30s de wake-up)
         time.sleep(89)
-        
+
         return pm10
 
     def reconnecter(self):
-        # Ferme proprement le port puis attend la reconnexion.
-        print("Attente du capteur sur /dev/ttyUSB0")
+        """
+        Procédure de reconnexion automatique après un débranchement USB.
 
-        # Forcer la fermeture pour libérer le verrou
+        Étapes :
+          1. Fermeture propre du port série pour libérer le verrou système
+          2. Attente active que le port soit accessible (USB ré-inséré)
+          3. Réinitialisation de l'objet SDS011 sur le même port
+
+        Cette méthode est bloquante : elle ne retourne que lorsque
+        le capteur est reconnecté et opérationnel.
+        """
+        print("Attente de reconnexion du capteur sur", self._port)
+
+        # ── Étape 1 : fermeture du port ───────────────────────────────────────
+        # Nécessaire pour libérer le verrou /dev/ttyUSB0 côté système
         try:
             self.ser.close()
         except Exception:
-            pass
+            pass   # on ignore si déjà fermé ou si l'attribut n'existe plus
 
-        # Attendre que le port soit réellement accessible
+        # ── Étape 2 : attente que le port soit physiquement accessible ─────────
+        # On essaie d'ouvrir brièvement le port série en boucle jusqu'au succès
         while True:
             try:
                 s = serial.Serial(self._port, baudrate=9600, timeout=1)
                 s.close()
-                break
+                break   # succès : le port existe et est accessible
             except (serial.SerialException, OSError):
-                print("Port non accessible, nouvelle tentative dans 2s")
+                print("Port non accessible, nouvelle tentative dans 2 s")
                 time.sleep(2)
 
-        print("Port accessible, reconnexion en cours")
+        print("Port accessible, tentative de reconnexion du capteur…")
+
+        # ── Étape 3 : réinitialisation de l'objet SDS011 ──────────────────────
+        # On appelle __init__ de la classe parente pour recréer la connexion série
+        # et re-flasher le mode query si nécessaire
         while True:
             try:
                 super().__init__(self._port, use_query_mode=True)
                 self.ser.timeout = 5
-                print("Capteur reconnecté")
+                print("Capteur SDS011 reconnecté avec succès")
                 return
             except serial.SerialException as e:
-                print(f"Reconnexion échouée : {e} nouvelle tentative dans 2s")
+                print(f"Reconnexion échouée : {e} — nouvelle tentative dans 2 s")
                 time.sleep(2)
