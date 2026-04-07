@@ -68,7 +68,7 @@ class MQTTClient:
     # ── Publication mesure ────────────────────────────────────────────────────
     def publish_measure(self, pm10: float) -> bool:
         ts      = datetime.now().isoformat()
-        payload = json.dumps({"timestamp": ts, "mesure": {"pm10": pm10}})
+        payload = json.dumps({"timestamp": ts, "mesure": {"PM 10": pm10}})
         result  = self.__client.publish(self.__topic, payload)
         if result[0] == mqtt.MQTT_ERR_SUCCESS:
             print(f"MQTT publié → {self.__topic} : {payload}")

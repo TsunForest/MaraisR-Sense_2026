@@ -1,32 +1,16 @@
 # View/IHM.py
 """
-Vue MVC — logique uniquement, tout le layout est dans ihm.kv.
-
-Propriétés Kivy exposées (bindées automatiquement dans ihm.kv) :
-    app.seuil_vert    NumericProperty  — seuil vert (µg/m³)
-    app.seuil_orange  NumericProperty  — seuil orange (µg/m³)
-
-Callbacks à brancher depuis le Controller AVANT ihm.run() :
-    ihm.on_btn_a = callable()
-    ihm.on_btn_b = callable()
-
-API publique thread-safe :
-    ihm.navigate_to(name)
-    ihm.update_pm10(pm10: float)
-    ihm.update_seuils(seuil_vert, seuil_orange)
-    ihm.show_popup(titre, message, duration=4)
-    ihm.hide_popup()
-    ihm.current_screen  → str
+Interface graphique Kivy pour UNIHIKER.
 """
 
 # ── Config Kivy AVANT tout import kivy ───────────────────────────────────────
 from kivy.config import Config
-Config.set('graphics', 'width',      '240')
-Config.set('graphics', 'height',     '320')
-Config.set('graphics', 'rotation',   '90')
+Config.set('graphics', 'width', '240')
+Config.set('graphics', 'height', '320')
+Config.set('graphics', 'rotation', '90')
 Config.set('graphics', 'fullscreen', '0')
-Config.set('graphics', 'show_cursor','0')
-Config.set('kivy',     'keyboard_mode', 'system')
+Config.set('graphics', 'show_cursor', '0')
+Config.set('kivy', 'keyboard_mode', 'system')
 
 import kivy
 kivy.require('2.1.0')
