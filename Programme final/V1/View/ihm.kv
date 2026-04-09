@@ -11,11 +11,10 @@
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ÉCRAN 1 – Accueil PM10
-# Affiche la mesure de particules fines avec fond coloré selon le seuil.
+# ECRAN 1 – Accueil PM10
+# Fond coloré selon le seuil actif, horloge temps réel.
 # ══════════════════════════════════════════════════════════════════════════════
 <AccueilScreen>:
-    # Fond gris clair de la page
     canvas.before:
         Color:
             rgba: 0.82, 0.82, 0.82, 1
@@ -28,7 +27,7 @@
         padding:  [6, 6, 6, 4]
         spacing:  5
 
-        # ── En-tête : titre à gauche, horloge à droite ────────────────────────
+        # En-tête : titre a gauche, horloge a droite
         BoxLayout:
             orientation: 'horizontal'
             size_hint:   1, None
@@ -44,7 +43,7 @@
                 color:     0, 0, 0, 1
                 size_hint: 0.60, 1
 
-            # Horloge mise à jour chaque seconde via root.time_text
+            # Horloge mise a jour chaque seconde via root.time_text
             Label:
                 text:      root.time_text
                 font_size: '12sp'
@@ -54,8 +53,7 @@
                 color:     0, 0, 0, 1
                 size_hint: 0.40, 1
 
-        # ── Bloc mesure : fond coloré selon le seuil ──────────────────────────
-        # root.pm10_color change dynamiquement (vert / orange / rouge / gris)
+        # Bloc mesure : fond coloré (root.pm10_color) et texte centré
         BoxLayout:
             orientation: 'vertical'
             padding:     [16, 0, 16, 0]
@@ -67,7 +65,7 @@
                     pos:  self.pos
                     size: self.size
 
-            # Valeur en grand (34sp) + état en plus petit (15sp), centré
+            # Valeur en grand (34sp) + état en plus petit (15sp)
             Label:
                 markup:    True
                 text:
@@ -80,10 +78,9 @@
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ÉCRAN 2 – Seuils PM10  (bouton A depuis l'accueil PM10)
-# Affiche les trois plages de seuils avec leur couleur respective.
+# ECRAN 2 – Seuils PM10
 # Les valeurs sont bindées sur app.seuil_vert / app.seuil_orange et se
-# mettent à jour automatiquement si le broker MQTT envoie de nouveaux seuils.
+# mettent a jour automatiquement si le broker MQTT envoie de nouveaux seuils.
 # ══════════════════════════════════════════════════════════════════════════════
 <SeuilsScreen>:
     canvas.before:
@@ -99,7 +96,7 @@
         spacing:     8
 
         Label:
-            text:      '[b]Seuils PM10 configurés[/b]'
+            text:      '[b]Seuils PM10 configures[/b]'
             markup:    True
             font_size: '15sp'
             color:     0, 0, 0, 1
@@ -109,7 +106,7 @@
             valign:    'middle'
             text_size: self.size
 
-        # Seuil vert — PM10 inférieur à seuil_vert
+        # Seuil vert
         BoxLayout:
             size_hint: 1, None
             height:    55
@@ -122,14 +119,14 @@
                     size: self.size
             Label:
                 markup:    True
-                text:      '[b]Seuil 1 — Vert[/b]\nPM10 < ' + str(int(app.seuil_vert)) + ' µg/m³'
+                text:      '[b]Seuil 1 - Vert[/b]\nPM10 < ' + str(int(app.seuil_vert)) + ' ug/m3'
                 font_size: '13sp'
                 halign:    'center'
                 valign:    'middle'
                 text_size: self.size
                 color:     0, 0, 0, 1
 
-        # Seuil orange — PM10 entre seuil_vert et seuil_orange
+        # Seuil orange
         BoxLayout:
             size_hint: 1, None
             height:    55
@@ -143,16 +140,16 @@
             Label:
                 markup:    True
                 text:
-                    '[b]Seuil 2 — Orange[/b]\nPM10  ' \
-                    + str(int(app.seuil_vert)) + ' – ' \
-                    + str(int(app.seuil_orange)) + ' µg/m³'
+                    '[b]Seuil 2 - Orange[/b]\nPM10  ' \
+                    + str(int(app.seuil_vert)) + ' - ' \
+                    + str(int(app.seuil_orange)) + ' ug/m3'
                 font_size: '13sp'
                 halign:    'center'
                 valign:    'middle'
                 text_size: self.size
                 color:     0, 0, 0, 1
 
-        # Seuil rouge — PM10 supérieur ou égal à seuil_orange
+        # Seuil rouge
         BoxLayout:
             size_hint: 1, None
             height:    55
@@ -165,7 +162,7 @@
                     size: self.size
             Label:
                 markup:    True
-                text:      '[b]Seuil 3 — Rouge[/b]\nPM10 ≥ ' + str(int(app.seuil_orange)) + ' µg/m³'
+                text:      '[b]Seuil 3 - Rouge[/b]\nPM10 >= ' + str(int(app.seuil_orange)) + ' ug/m3'
                 font_size: '13sp'
                 halign:    'center'
                 valign:    'middle'
@@ -185,9 +182,8 @@
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ÉCRAN 3 – Configuration réseau  (bouton B)
-# Affiche l'adresse IP et l'adresse MAC de la carte.
-# Les valeurs sont récupérées à chaque entrée dans l'écran (on_enter).
+# ECRAN 3 – Configuration réseau
+# root.ip_text et root.mac_text sont mis a jour en arrière-plan (on_enter).
 # ══════════════════════════════════════════════════════════════════════════════
 <ReseauScreen>:
     canvas.before:
@@ -203,7 +199,7 @@
         spacing:     10
 
         Label:
-            text:      '[b]Configuration réseau[/b]'
+            text:      '[b]Configuration reseau[/b]'
             markup:    True
             font_size: '15sp'
             color:     0, 0, 0, 1
@@ -213,7 +209,7 @@
             valign:    'middle'
             text_size: self.size
 
-        # Bloc adresse IP — root.ip_text mis à jour en arrière-plan
+        # Bloc adresse IP
         BoxLayout:
             orientation: 'vertical'
             size_hint:   1, None
@@ -282,9 +278,9 @@
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ÉCRAN 4 – Accueil TVOC + CO2  (NON UTILISÉ POUR L'INSTANT)
+# ECRAN 4 – Accueil TVOC + CO2
 # Deux blocs colorés empilés, un par capteur.
-# Chaque bloc affiche le nom du capteur, la valeur mesurée et l'état qualitatif.
+# Note : "CO2" sans exposant pour compatibilité d'affichage sur UNIHIKER.
 # ══════════════════════════════════════════════════════════════════════════════
 <AccueilCapteur2Screen>:
     canvas.before:
@@ -306,7 +302,7 @@
             height:      24
 
             Label:
-                text:      '[b]Qualité de l\'air intérieur[/b]'
+                text:      '[b]Qualite de l\'air interieur[/b]'
                 markup:    True
                 font_size: '12sp'
                 halign:    'left'
@@ -315,7 +311,6 @@
                 color:     0, 0, 0, 1
                 size_hint: 0.60, 1
 
-            # Horloge partagée via root.time_text
             Label:
                 text:      root.time_text
                 font_size: '12sp'
@@ -325,8 +320,7 @@
                 color:     0, 0, 0, 1
                 size_hint: 0.40, 1
 
-        # ── Bloc TVOC ─────────────────────────────────────────────────────────
-        # root.tvoc_color change selon app.seuil_tvoc_vert / seuil_tvoc_orange
+        # Bloc TVOC — root.tvoc_color selon app.seuil_tvoc_*
         BoxLayout:
             orientation: 'vertical'
             padding:     [16, 0, 16, 0]
@@ -349,8 +343,8 @@
                 text_size: self.size
                 color:     0, 0, 0, 1
 
-        # ── Bloc CO2 ──────────────────────────────────────────────────────────
-        # root.co2_color change selon app.seuil_co2_vert / seuil_co2_orange
+        # Bloc CO2 — root.co2_color selon app.seuil_co2_*
+        # "CO2" en texte normal, pas de caractère exposant
         BoxLayout:
             orientation: 'vertical'
             padding:     [16, 0, 16, 0]
@@ -365,7 +359,7 @@
             Label:
                 markup:    True
                 text:
-                    '[size=18sp][b]CO\u2082[/b][/size]\n' \
+                    '[size=18sp][b]CO2[/b][/size]\n' \
                     + '[size=30sp][b]' + root.co2_val_text + '[/b][/size]\n' \
                     + '[size=13sp]' + root.co2_state_text + '[/size]'
                 halign:    'center'
@@ -375,8 +369,8 @@
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ÉCRAN 5 – Seuils TVOC + CO2  (NON UTILISÉ POUR L'INSTANT)
-# Deux séries de trois seuils, une par capteur.
+# ECRAN 5 – Seuils TVOC + CO2
+# Deux séries de seuils, une par capteur.
 # ══════════════════════════════════════════════════════════════════════════════
 <SeuilsCapteur2Screen>:
     canvas.before:
@@ -402,9 +396,9 @@
             valign:    'middle'
             text_size: self.size
 
-        # ── Section TVOC ──────────────────────────────────────────────────────
+        # Section TVOC
         Label:
-            text:      '[b]— TVOC (ppb) —[/b]'
+            text:      '[b]-- TVOC (ppb) --[/b]'
             markup:    True
             font_size: '12sp'
             color:     0.25, 0.25, 0.25, 1
@@ -446,7 +440,7 @@
                 markup:    True
                 text:
                     '[b]Orange[/b]  TVOC ' \
-                    + str(int(app.seuil_tvoc_vert)) + ' – ' \
+                    + str(int(app.seuil_tvoc_vert)) + ' - ' \
                     + str(int(app.seuil_tvoc_orange)) + ' ppb'
                 font_size: '12sp'
                 halign:    'center'
@@ -466,16 +460,16 @@
                     size: self.size
             Label:
                 markup:    True
-                text:      '[b]Rouge[/b]  TVOC \u2265 ' + str(int(app.seuil_tvoc_orange)) + ' ppb'
+                text:      '[b]Rouge[/b]  TVOC >= ' + str(int(app.seuil_tvoc_orange)) + ' ppb'
                 font_size: '12sp'
                 halign:    'center'
                 valign:    'middle'
                 text_size: self.size
                 color:     0, 0, 0, 1
 
-        # ── Section CO2 ───────────────────────────────────────────────────────
+        # Section CO2
         Label:
-            text:      '[b]— CO\u2082 (ppm) —[/b]'
+            text:      '[b]-- CO2 (ppm) --[/b]'
             markup:    True
             font_size: '12sp'
             color:     0.25, 0.25, 0.25, 1
@@ -496,7 +490,7 @@
                     size: self.size
             Label:
                 markup:    True
-                text:      '[b]Vert[/b]  CO\u2082 < ' + str(int(app.seuil_co2_vert)) + ' ppm'
+                text:      '[b]Vert[/b]  CO2 < ' + str(int(app.seuil_co2_vert)) + ' ppm'
                 font_size: '12sp'
                 halign:    'center'
                 valign:    'middle'
@@ -516,8 +510,8 @@
             Label:
                 markup:    True
                 text:
-                    '[b]Orange[/b]  CO\u2082 ' \
-                    + str(int(app.seuil_co2_vert)) + ' – ' \
+                    '[b]Orange[/b]  CO2 ' \
+                    + str(int(app.seuil_co2_vert)) + ' - ' \
                     + str(int(app.seuil_co2_orange)) + ' ppm'
                 font_size: '12sp'
                 halign:    'center'
@@ -537,7 +531,7 @@
                     size: self.size
             Label:
                 markup:    True
-                text:      '[b]Rouge[/b]  CO\u2082 \u2265 ' + str(int(app.seuil_co2_orange)) + ' ppm'
+                text:      '[b]Rouge[/b]  CO2 >= ' + str(int(app.seuil_co2_orange)) + ' ppm'
                 font_size: '12sp'
                 halign:    'center'
                 valign:    'middle'
@@ -557,14 +551,11 @@
 
 # ══════════════════════════════════════════════════════════════════════════════
 # POPUP — overlay semi-transparent centré par-dessus tout écran
-# S'affiche via PopupOverlay.show() et se masque via hide() ou automatiquement.
 # opacity est bindé sur is_visible : 1 = visible, 0 = invisible.
 # ══════════════════════════════════════════════════════════════════════════════
 <PopupOverlay>:
-    # La visibilité est contrôlée par la BooleanProperty is_visible
     opacity: 1 if self.is_visible else 0
 
-    # Fond rectangulaire arrondi sombre semi-transparent
     canvas.before:
         Color:
             rgba: 0.10, 0.10, 0.10, 0.88
