@@ -170,7 +170,7 @@ class Controller:
         en local avec les seuils par défaut.
         """
         try:
-            client = MQTTClient()
+            client = MQTTClient(ca_cert="/ca.crt")
             client.subscribe_seuils(TOPIC_SEUILS, self._on_seuils_recus)
             self.ihm.hide_popup()
             return client

@@ -22,7 +22,7 @@ Formats JSON publiés :
 import json
 import uuid
 from datetime import datetime
-
+import ssl
 import paho.mqtt.client as mqtt
 
 
@@ -34,10 +34,13 @@ class MQTTClient:
 
     def __init__(self,
                  broker="marais2026.btssn.ovh",
-                 port=1883,
+                 port=8883,
                  topic_base="marais/sondes/",
-                 username="marais2026",
-                 password="hyrome49#"):
+                 username="*****",
+                 password="*****",
+                 ca_cert="ca.crt",
+                 certfile=None,
+                 keyfile=None):
         """
         Initialise le client et établit la connexion au broker.
 
@@ -64,9 +67,12 @@ class MQTTClient:
 
         self._broker     = broker
         self._port       = port
+        self._ca_cert   = ca_cert
+        self._certfile  = certfile
+        self._keyfile   = keyfile
         self._client_id  = self._mac
         self._username   = username
-        self._password   = password
+        self._password   = password 
 
         # Topics de publication
         self._topic_pm10    = f"{topic_base}{self._mac}/pm10"
@@ -129,6 +135,14 @@ class MQTTClient:
         self._client = mqtt.Client(self._client_id)
         if self._username:
             self._client.username_pw_set(self._username, self._password)
+
+        self._client.tls_set(
+            ca_certs=self._ca_cert,
+            certfile=self._certfile,   # None si pas de mTLS
+            keyfile=self._keyfile,     # None si pas de mTLS
+            tls_version=ssl.PROTOCOL_TLS
+        )
+        
         self._client.on_connect = self._on_connect
         self._client.on_message = self._on_message
         # connect() est bloquant et leve socket.error si le broker est injoignable
