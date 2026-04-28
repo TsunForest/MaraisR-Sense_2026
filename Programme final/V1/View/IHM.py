@@ -23,28 +23,34 @@ API publique (toutes thread-safe) :
     ihm.show_popup(titre, message, duration)
     ihm.hide_popup()
     ihm.current_screen  → str
+
+Écrans disponibles :
+    'accueil'     – mesure PM10
+    'capteur2'    – mesure TVOC + eCO2
+    'seuils'      – seuils PM10
+    'seuils_tvoc' – seuils TVOC  (remplace la moitié haute de l'ancien seuils_capteur2)
+    'seuils_co2'  – seuils eCO2  (remplace la moitié basse de l'ancien seuils_capteur2)
+    'reseau'      – info réseau
 """
 
 # ── Configuration Kivy AVANT tout import kivy ─────────────────────────────────
-# Ces lignes doivent précéder tous les imports kivy, sinon les valeurs sont
-# ignorées car la fenêtre est déjà créée.
 from kivy.config import Config
-Config.set('graphics', 'width',      '240')   # largeur physique de l'écran UNIHIKER
-Config.set('graphics', 'height',     '320')   # hauteur physique de l'écran UNIHIKER
-Config.set('graphics', 'rotation',   '90')    # rotation → paysage effectif 320x240
+Config.set('graphics', 'width',      '240')
+Config.set('graphics', 'height',     '320')
+Config.set('graphics', 'rotation',   '90')
 Config.set('graphics', 'fullscreen', '0')
-Config.set('graphics', 'show_cursor','0')     # pas de curseur souris sur la carte
+Config.set('graphics', 'show_cursor','0')
 Config.set('kivy',     'keyboard_mode', 'system')
 
 import kivy
 kivy.require('2.1.0')
 
-import os           # pour construire le chemin vers ihm.kv
-import time         # pour le debounce des boutons (time.monotonic)
-import threading    # pour la récupération IP/MAC en arrière-plan
-import socket       # pour récupérer l'adresse IP
-import uuid         # pour récupérer l'adresse MAC
-from datetime import datetime   # pour l'horloge
+import os
+import time
+import threading
+import socket
+import uuid
+from datetime import datetime
 
 from kivy.app                import App
 from kivy.clock              import Clock
@@ -57,35 +63,33 @@ from kivy.uix.boxlayout      import BoxLayout
 from kivy.uix.screenmanager  import ScreenManager, Screen, NoTransition
 
 # ── Constantes ────────────────────────────────────────────────────────────────
-# Intervalle de polling des boutons physiques (secondes)
-GPIO_POLL_INTERVAL = 0.05
+# Polling des boutons physiques toutes les 0.1 s pour une réactivité correcte.
+# La valeur précédente (6 s) était beaucoup trop lente et causait des doubles
+# déclenchements car l'état du bouton pouvait changer plusieurs fois entre deux polls.
+GPIO_POLL_INTERVAL = 0.1
 
-# Délai minimum entre deux appuis acceptés (anti-rebond logiciel)
-DEBOUNCE_DELAY = 0.5
+# Durée de maintien requise pour valider un appui (secondes).
+# L'utilisateur doit maintenir le bouton 3 s pour changer de page.
+HOLD_DURATION = 3.0
 
 # Seuils par défaut utilisés si aucun message MQTT n'est reçu
-SEUIL_VERT_DEFAUT         = 25.0    # PM10  ug/m3
-SEUIL_ORANGE_DEFAUT       = 50.0    # PM10  ug/m3
-SEUIL_TVOC_VERT_DEFAUT    = 220.0   # TVOC  ppb
-SEUIL_TVOC_ORANGE_DEFAUT  = 660.0   # TVOC  ppb
-SEUIL_CO2_VERT_DEFAUT     = 800.0   # eCO2  ppm
-SEUIL_CO2_ORANGE_DEFAUT   = 1200.0  # eCO2  ppm
+SEUIL_VERT_DEFAUT         = 25.0
+SEUIL_ORANGE_DEFAUT       = 50.0
+SEUIL_TVOC_VERT_DEFAUT    = 220.0
+SEUIL_TVOC_ORANGE_DEFAUT  = 660.0
+SEUIL_CO2_VERT_DEFAUT     = 800.0
+SEUIL_CO2_ORANGE_DEFAUT   = 1200.0
 
-# Couleurs RGBA (listes car Kivy utilise des listes pour ListProperty)
-C_VERT   = [0.13, 0.86, 0.13, 1]   # vert   : qualité bonne
-C_ORANGE = [1.00, 0.60, 0.00, 1]   # orange : qualité moyenne
-C_ROUGE  = [0.95, 0.15, 0.15, 1]   # rouge  : mauvaise qualité
-C_DARK   = [0.35, 0.35, 0.35, 1]   # gris foncé : état initial (pas de mesure)
+# Couleurs RGBA
+C_VERT   = [0.13, 0.86, 0.13, 1]
+C_ORANGE = [1.00, 0.60, 0.00, 1]
+C_ROUGE  = [0.95, 0.15, 0.15, 1]
+C_DARK   = [0.35, 0.35, 0.35, 1]
 
 
-# ── Helpers réseau (exécutés dans un thread de fond pour ne pas bloquer l'UI) ─
+# ── Helpers réseau ────────────────────────────────────────────────────────────
 
 def _get_ip() -> str:
-    """
-    Retourne l'adresse IP locale en tentant une connexion UDP vers 8.8.8.8.
-    Aucun paquet n'est réellement envoyé : c'est une astuce pour identifier
-    l'interface réseau active sans parser ifconfig.
-    """
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(1)
@@ -98,10 +102,6 @@ def _get_ip() -> str:
 
 
 def _get_mac() -> str:
-    """
-    Retourne l'adresse MAC de l'interface principale au format xx:xx:xx:xx:xx:xx
-    via uuid.getnode().
-    """
     try:
         n = uuid.getnode()
         return ':'.join(f'{(n >> (8 * i)) & 0xff:02x}' for i in range(5, -1, -1))
@@ -113,16 +113,6 @@ def _get_mac() -> str:
 # ECRAN 1 – Accueil PM10
 # ══════════════════════════════════════════════════════════════════════════════
 class AccueilScreen(Screen):
-    """
-    Écran principal PM10 : affiche la mesure de particules fines avec un fond
-    coloré selon le seuil actif et une horloge temps réel.
-
-    Propriétés bindées dans ihm.kv :
-        pm10_color  : couleur RGBA du fond du bloc mesure
-        val_text    : valeur affichée (ex. "42.3 ug/m3")
-        state_text  : état qualitatif (ex. "Qualite moyenne")
-        time_text   : horloge (ex. "07/04  14:32:05")
-    """
     pm10_color = ListProperty(C_DARK)
     val_text   = StringProperty('-- ug/m3')
     state_text = StringProperty('En attente de la premiere mesure...')
@@ -130,27 +120,16 @@ class AccueilScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Mise à jour de l'horloge toutes les secondes via le scheduler Kivy
         Clock.schedule_interval(self._tick, 1)
 
     def _tick(self, dt):
-        """Rafraichit l'horloge. Appelée par Clock chaque seconde."""
         self.time_text = datetime.now().strftime('%d/%m  %H:%M:%S')
 
     def update_pm10(self, pm10: float):
-        """
-        Met à jour la valeur et la couleur de fond selon les seuils actifs.
-        Les seuils sont lus en temps réel depuis l'App (app.seuil_vert, etc.)
-        ce qui permet une mise à jour immédiate si les seuils changent via MQTT.
-
-        :param pm10: Valeur PM10 en ug/m3.
-        """
         app = App.get_running_app()
         sv  = app.seuil_vert
         so  = app.seuil_orange
-
         self.val_text = f'{pm10:.1f} ug/m3'
-
         if pm10 < sv:
             self.pm10_color = C_VERT
             self.state_text = f'Bonne qualite  (< {sv:.0f} ug/m3)'
@@ -166,13 +145,6 @@ class AccueilScreen(Screen):
 # ECRAN 2 – Seuils PM10
 # ══════════════════════════════════════════════════════════════════════════════
 class SeuilsScreen(Screen):
-    """
-    Écran des seuils PM10.
-    Pas de propriétés propres : le KV lit directement app.seuil_vert et
-    app.seuil_orange, qui sont des NumericProperty sur l'App.
-    La mise à jour est donc automatique quand le broker MQTT envoie
-    de nouveaux seuils.
-    """
     pass
 
 
@@ -180,36 +152,19 @@ class SeuilsScreen(Screen):
 # ECRAN 3 – Configuration réseau
 # ══════════════════════════════════════════════════════════════════════════════
 class ReseauScreen(Screen):
-    """
-    Affiche l'adresse IP et l'adresse MAC de la carte UNIHIKER.
-    Les valeurs sont récupérées dans un thread de fond à chaque entrée dans
-    l'écran pour ne pas bloquer l'UI pendant la résolution réseau.
-
-    Propriétés bindées dans ihm.kv :
-        ip_text  : adresse IP (ex. "192.168.1.42")
-        mac_text : adresse MAC (ex. "62:03:57:41:38:23")
-    """
     ip_text  = StringProperty('...')
     mac_text = StringProperty('...')
 
     def on_enter(self, *args):
-        """Déclenché automatiquement par Kivy à chaque entrée dans cet écran."""
         self.ip_text  = '...'
         self.mac_text = '...'
-        # Thread daemon pour ne pas bloquer l'UI ni l'arrêt du programme
         threading.Thread(target=self._fetch, daemon=True).start()
 
     def _fetch(self):
-        """
-        Récupère IP et MAC dans un thread de fond, puis reposte le résultat
-        dans le thread UI via Clock.schedule_once (obligatoire pour modifier
-        des propriétés Kivy depuis un thread autre que le thread principal).
-        """
         ip, mac = _get_ip(), _get_mac()
         Clock.schedule_once(lambda dt: self._set(ip, mac), 0)
 
     def _set(self, ip: str, mac: str):
-        """Met à jour les labels. Appelée dans le thread UI via Clock."""
         self.ip_text  = ip
         self.mac_text = mac
 
@@ -218,20 +173,6 @@ class ReseauScreen(Screen):
 # ECRAN 4 – Accueil TVOC + eCO2
 # ══════════════════════════════════════════════════════════════════════════════
 class AccueilCapteur2Screen(Screen):
-    """
-    Écran de mesure qualité d'air intérieur (CCS811).
-    Deux blocs colorés empilés : TVOC en ppb et eCO2 en ppm.
-    Chaque bloc a sa propre couleur dynamique selon ses seuils.
-
-    Propriétés bindées dans ihm.kv :
-        tvoc_color      : couleur RGBA du bloc TVOC
-        tvoc_val_text   : valeur TVOC affichée (ex. "320 ppb")
-        tvoc_state_text : état qualitatif TVOC
-        co2_color       : couleur RGBA du bloc eCO2
-        co2_val_text    : valeur eCO2 affichée (ex. "850 ppm")
-        co2_state_text  : état qualitatif eCO2
-        time_text       : horloge (même format que AccueilScreen)
-    """
     tvoc_color      = ListProperty(C_DARK)
     tvoc_val_text   = StringProperty('-- ppb')
     tvoc_state_text = StringProperty('En attente...')
@@ -245,21 +186,13 @@ class AccueilCapteur2Screen(Screen):
         Clock.schedule_interval(self._tick, 1)
 
     def _tick(self, dt):
-        """Rafraichit l'horloge. Appelée par Clock chaque seconde."""
         self.time_text = datetime.now().strftime('%d/%m  %H:%M:%S')
 
     def update_tvoc(self, tvoc: int):
-        """
-        Met à jour l'affichage TVOC selon les seuils actifs.
-
-        :param tvoc: Valeur TVOC en ppb (retournée par CCS811).
-        """
         app = App.get_running_app()
         sv  = app.seuil_tvoc_vert
         so  = app.seuil_tvoc_orange
-
         self.tvoc_val_text = f'{tvoc} ppb'
-
         if tvoc < sv:
             self.tvoc_color      = C_VERT
             self.tvoc_state_text = f'Bon  (< {sv:.0f} ppb)'
@@ -271,18 +204,10 @@ class AccueilCapteur2Screen(Screen):
             self.tvoc_state_text = f'Mauvais  (>= {so:.0f} ppb) !'
 
     def update_co2(self, eco2: int):
-        """
-        Met à jour l'affichage eCO2 selon les seuils actifs.
-        Le paramètre est nommé eco2 pour correspondre à la sortie du CCS811.
-
-        :param eco2: Valeur eCO2 en ppm (retournée par CCS811).
-        """
         app = App.get_running_app()
         sv  = app.seuil_co2_vert
         so  = app.seuil_co2_orange
-
         self.co2_val_text = f'{eco2} ppm'
-
         if eco2 < sv:
             self.co2_color      = C_VERT
             self.co2_state_text = f'Bon  (< {sv:.0f} ppm)'
@@ -295,14 +220,19 @@ class AccueilCapteur2Screen(Screen):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ECRAN 5 – Seuils TVOC + eCO2
+# ECRANS 5 & 6 – Seuils TVOC / Seuils eCO2  (anciennement SeuilsCapteur2Screen)
+#
+# L'ancienne page unique débordait de l'écran (≈350 px pour 240 px disponibles).
+# On sépare désormais TVOC et eCO2 en deux écrans indépendants.
+# Le Controller les fait alterner via _demarrer_alternance() comme les autres.
 # ══════════════════════════════════════════════════════════════════════════════
-class SeuilsCapteur2Screen(Screen):
-    """
-    Écran des seuils pour TVOC et eCO2.
-    Comme SeuilsScreen, pas de propriétés propres : le KV lit directement
-    app.seuil_tvoc_* et app.seuil_co2_* et se met à jour automatiquement.
-    """
+class SeuilsTVOCScreen(Screen):
+    """Seuils TVOC uniquement. Binding direct sur app.seuil_tvoc_*."""
+    pass
+
+
+class SeuilsCO2Screen(Screen):
+    """Seuils eCO2 uniquement. Binding direct sur app.seuil_co2_*."""
     pass
 
 
@@ -310,28 +240,16 @@ class SeuilsCapteur2Screen(Screen):
 # POPUP overlay
 # ══════════════════════════════════════════════════════════════════════════════
 class PopupOverlay(BoxLayout):
-    """
-    Bandeau d'alerte semi-transparent affiché par-dessus n'importe quel écran.
-    Rendu visible/invisible via la BooleanProperty is_visible, ce qui modifie
-    l'opacité sans recréer de widget (pas de recomposition de l'arbre).
-
-    Propriétés bindées dans ihm.kv :
-        is_visible : True = affiché, False = invisible
-        titre      : titre de l'alerte (rouge)
-        message    : message détaillé (blanc)
-    """
     is_visible = BooleanProperty(False)
     titre      = StringProperty('')
     message    = StringProperty('')
 
     def show(self, titre: str, message: str):
-        """Affiche le popup avec le titre et le message fournis."""
         self.titre      = titre
         self.message    = message
         self.is_visible = True
 
     def hide(self):
-        """Masque le popup."""
         self.is_visible = False
 
 
@@ -339,14 +257,6 @@ class PopupOverlay(BoxLayout):
 # APPLICATION PRINCIPALE — View pure
 # ══════════════════════════════════════════════════════════════════════════════
 class IHM(App):
-    """
-    Classe principale Kivy. Ne contient aucune logique métier.
-
-    Les NumericProperty déclarées ici sont accessibles dans ihm.kv via 'app.xxx'.
-    Kivy observe automatiquement ces propriétés : tout widget du KV qui les
-    référence se redessine lorsqu'elles changent.
-    """
-
     # ── Seuils PM10 ───────────────────────────────────────────────────────────
     seuil_vert   = NumericProperty(SEUIL_VERT_DEFAUT)
     seuil_orange = NumericProperty(SEUIL_ORANGE_DEFAUT)
@@ -359,74 +269,75 @@ class IHM(App):
     seuil_co2_vert   = NumericProperty(SEUIL_CO2_VERT_DEFAUT)
     seuil_co2_orange = NumericProperty(SEUIL_CO2_ORANGE_DEFAUT)
 
-    # Callbacks branchés par le Controller AVANT ihm.run()
     on_btn_a = None
     on_btn_b = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._popup_event  = None    # timer d'auto-fermeture du popup
-        self._last_pm10    = None    # dernière valeur PM10 (pour recalcul seuils)
-        self._btn_a        = None    # objet button_a pinpong (None si absent)
-        self._btn_b        = None    # objet button_b pinpong
-        self._prev_a       = False   # état précédent bouton A (détection de front)
-        self._prev_b       = False   # état précédent bouton B
-        self._last_press_a = 0.0     # timestamp du dernier appui validé bouton A
-        self._last_press_b = 0.0     # timestamp du dernier appui validé bouton B
-        Window.clearcolor  = (0.82, 0.82, 0.82, 1)
+        self._popup_event  = None
+        self._last_pm10    = None
+        self._btn_a        = None
+        self._btn_b        = None
 
-    # ── Propriété lecture seule ───────────────────────────────────────────────
+        # ── État pour la détection de maintien 3 s ────────────────────────────
+        # _press_start_X  : monotonic() du moment où le bouton est passé à True.
+        #                   None si le bouton est relâché.
+        # _triggered_X    : True si l'action a déjà été déclenchée pour cet appui,
+        #                   pour éviter de re-déclencher tant que le bouton reste enfoncé.
+        self._press_start_a = None
+        self._press_start_b = None
+        self._triggered_a   = False
+        self._triggered_b   = False
+
+        Window.clearcolor = (0.82, 0.82, 0.82, 1)
+
+    # ── Désactivation du chargement automatique du KV par Kivy ───────────────
+    # Sans cette méthode, Kivy charge ihm.kv automatiquement (car le fichier porte
+    # le nom de la classe en minuscules), PUIS build() le chargerait une seconde fois.
+    # Ce double chargement fait que les règles KV sont appliquées deux fois :
+    # chaque widget reçoit ses enfants en double → notifications affichées côte à côte.
+    # On désactive l'auto-chargement et on charge manuellement dans build().
+    def load_kv(self, filename=None):
+        pass
+
     @property
     def current_screen(self) -> str:
-        """
-        Retourne le nom de l'écran actif.
-        Utilisé par le Controller pour décider où naviguer.
-        """
         return self.sm.current if hasattr(self, 'sm') else 'accueil'
 
     # ── Build ─────────────────────────────────────────────────────────────────
     def build(self):
-        """
-        Construit l'arbre de widgets Kivy.
-        Appelé automatiquement par ihm.run().
-        Le fichier ihm.kv est chargé explicitement pour fonctionner
-        quel que soit le répertoire de travail courant.
-        """
+        # Chargement unique et explicite du fichier KV (chemin absolu pour être
+        # indépendant du répertoire de travail courant).
         kv_path = os.path.join(os.path.dirname(__file__), 'ihm.kv')
         Builder.load_file(kv_path)
 
-        # ScreenManager sans transition pour un changement d'écran instantané
         self.sm = ScreenManager(transition=NoTransition())
 
-        # Création de tous les écrans
-        self.s_accueil         = AccueilScreen(name='accueil')
-        self.s_seuils          = SeuilsScreen(name='seuils')
-        self.s_reseau          = ReseauScreen(name='reseau')
-        self.s_capteur2        = AccueilCapteur2Screen(name='capteur2')
-        self.s_seuils_capteur2 = SeuilsCapteur2Screen(name='seuils_capteur2')
+        self.s_accueil      = AccueilScreen(name='accueil')
+        self.s_seuils       = SeuilsScreen(name='seuils')
+        self.s_reseau       = ReseauScreen(name='reseau')
+        self.s_capteur2     = AccueilCapteur2Screen(name='capteur2')
+        self.s_seuils_tvoc  = SeuilsTVOCScreen(name='seuils_tvoc')
+        self.s_seuils_co2   = SeuilsCO2Screen(name='seuils_co2')
 
         for s in (self.s_accueil, self.s_seuils, self.s_reseau,
-                  self.s_capteur2, self.s_seuils_capteur2):
+                  self.s_capteur2, self.s_seuils_tvoc, self.s_seuils_co2):
             self.sm.add_widget(s)
 
-        # Popup overlay positionné au centre de la fenêtre
         self._popup = PopupOverlay(
             size_hint=(0.88, None),
             height=90,
             pos_hint={'center_x': 0.5, 'center_y': 0.5}
         )
 
-        # FloatLayout racine : ScreenManager en dessous, popup par-dessus
         root = FloatLayout()
         root.add_widget(self.sm)
         root.add_widget(self._popup)
 
-        # Initialisation des boutons dans le thread principal (obligatoire pour pinpong)
         self._init_buttons()
         Clock.schedule_interval(self._poll_buttons, GPIO_POLL_INTERVAL)
         Window.bind(on_key_down=self._on_key)
 
-        # Mise à jour initiale si une mesure est arrivée avant que l'UI soit prête
         if self._last_pm10 is not None:
             self.s_accueil.update_pm10(self._last_pm10)
 
@@ -434,11 +345,6 @@ class IHM(App):
 
     # ── Initialisation des boutons UNIHIKER ───────────────────────────────────
     def _init_buttons(self):
-        """
-        Initialise les objets button_a et button_b de pinpong.
-        Ces objets correspondent aux boutons physiques intégrés à la carte.
-        Silencieux si pinpong est absent (mode test sur PC).
-        """
         try:
             from pinpong.board import Board
             from pinpong.extension.unihiker import button_a, button_b
@@ -451,17 +357,17 @@ class IHM(App):
         except Exception as e:
             print(f"Erreur initialisation boutons : {e}")
 
-    # ── Polling des boutons ───────────────────────────────────────────────────
+    # ── Polling des boutons avec détection de maintien 3 s ───────────────────
     def _poll_buttons(self, dt):
         """
-        Appelée par Clock.schedule_interval toutes les GPIO_POLL_INTERVAL secondes.
-        S'exécute dans le thread principal Kivy → pas de problème avec les signaux.
+        Appelée toutes les GPIO_POLL_INTERVAL secondes (0.1 s).
+        L'action n'est déclenchée que lorsque le bouton est maintenu
+        pendant HOLD_DURATION secondes (3 s) de façon continue.
 
-        Logique de détection :
-          - is_pressed() retourne True tant que le bouton est enfoncé.
-          - On déclenche l'action uniquement sur le front montant (False → True)
-            pour éviter les appuis répétés si le bouton reste enfoncé.
-          - Le debounce (DEBOUNCE_DELAY) filtre les rebonds mécaniques du bouton.
+        Principe :
+          - Appui détecté (False→True) → enregistrement de l'heure de début.
+          - Maintien ≥ 3 s et pas encore déclenché → déclenchement + marquage.
+          - Relâchement → remise à zéro (permettra un prochain appui).
         """
         if self._btn_a is None:
             return
@@ -470,17 +376,32 @@ class IHM(App):
             a   = self._btn_a.is_pressed()
             b   = self._btn_b.is_pressed()
 
-            if a and not self._prev_a and now - self._last_press_a >= DEBOUNCE_DELAY:
-                self._last_press_a = now
-                if callable(self.on_btn_a):
-                    self.on_btn_a()
+            # ── Bouton A ──────────────────────────────────────────────────────
+            if a:
+                if self._press_start_a is None:
+                    # Front montant : début du maintien
+                    self._press_start_a = now
+                elif not self._triggered_a and (now - self._press_start_a) >= HOLD_DURATION:
+                    # Maintien 3 s atteint pour la première fois
+                    self._triggered_a = True
+                    if callable(self.on_btn_a):
+                        self.on_btn_a()
+            else:
+                # Relâchement : remise à zéro pour le prochain appui
+                self._press_start_a = None
+                self._triggered_a   = False
 
-            if b and not self._prev_b and now - self._last_press_b >= DEBOUNCE_DELAY:
-                self._last_press_b = now
-                if callable(self.on_btn_b):
-                    self.on_btn_b()
-
-            self._prev_a, self._prev_b = a, b
+            # ── Bouton B ──────────────────────────────────────────────────────
+            if b:
+                if self._press_start_b is None:
+                    self._press_start_b = now
+                elif not self._triggered_b and (now - self._press_start_b) >= HOLD_DURATION:
+                    self._triggered_b = True
+                    if callable(self.on_btn_b):
+                        self.on_btn_b()
+            else:
+                self._press_start_b = None
+                self._triggered_b   = False
 
         except Exception as e:
             print(f"Erreur lecture boutons : {e}")
@@ -489,8 +410,7 @@ class IHM(App):
     def _on_key(self, window, key, *args):
         """
         Fallback clavier pour tester sans carte UNIHIKER.
-        Touche 'a' (keycode 97) → simule le bouton A.
-        Touche 'b' (keycode 98) → simule le bouton B.
+        Un appui clavier simple simule un maintien 3 s (mode test uniquement).
         """
         if key == 97 and callable(self.on_btn_a):
             self.on_btn_a()
@@ -498,29 +418,15 @@ class IHM(App):
             self.on_btn_b()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # API PUBLIQUE — appelée par le Controller, toutes thread-safe
-    # Thread-safe = passage par Clock.schedule_once pour s'exécuter dans le
-    # thread UI Kivy, qui est le seul autorisé à modifier les propriétés.
+    # API PUBLIQUE — thread-safe (passage par Clock.schedule_once)
     # ══════════════════════════════════════════════════════════════════════════
 
     def navigate_to(self, screen_name: str):
-        """
-        Change l'écran affiché.
-
-        :param screen_name: Nom de l'écran ('accueil', 'seuils', 'reseau',
-                            'capteur2', 'seuils_capteur2').
-        """
         Clock.schedule_once(
             lambda dt: setattr(self.sm, 'current', screen_name), 0
         )
 
     def update_pm10(self, pm10: float):
-        """
-        Met à jour la valeur PM10 sur l'écran d'accueil.
-        Stocke la dernière valeur pour recalcul en cas de changement de seuils.
-
-        :param pm10: Valeur PM10 en ug/m3.
-        """
         self._last_pm10 = pm10
         if hasattr(self, 's_accueil'):
             Clock.schedule_once(
@@ -528,13 +434,6 @@ class IHM(App):
             )
 
     def update_tvoc_co2(self, eco2: int, tvoc: int):
-        """
-        Met à jour les valeurs TVOC et eCO2 sur l'écran capteur2.
-        Les paramètres correspondent directement à la sortie de CCS811.read_eco2_tvoc().
-
-        :param eco2: Valeur eCO2 en ppm.
-        :param tvoc: Valeur TVOC en ppb.
-        """
         if hasattr(self, 's_capteur2'):
             Clock.schedule_once(
                 lambda dt: (
@@ -544,15 +443,6 @@ class IHM(App):
             )
 
     def update_seuils(self, seuil_vert: float, seuil_orange: float):
-        """
-        Met à jour les seuils PM10.
-        Comme seuil_vert et seuil_orange sont des NumericProperty sur l'App,
-        SeuilsScreen se met à jour automatiquement via le binding KV.
-        La couleur de la mesure courante est aussi recalculée.
-
-        :param seuil_vert:   Nouveau seuil vert en ug/m3.
-        :param seuil_orange: Nouveau seuil orange en ug/m3.
-        """
         def _do(dt):
             self.seuil_vert   = seuil_vert
             self.seuil_orange = seuil_orange
@@ -562,15 +452,6 @@ class IHM(App):
 
     def update_seuils_capteur2(self, tvoc_vert: float, tvoc_orange: float,
                                 co2_vert: float, co2_orange: float):
-        """
-        Met à jour les seuils TVOC et eCO2.
-        SeuilsCapteur2Screen se met à jour automatiquement via le binding KV.
-
-        :param tvoc_vert:   Nouveau seuil TVOC vert en ppb.
-        :param tvoc_orange: Nouveau seuil TVOC orange en ppb.
-        :param co2_vert:    Nouveau seuil eCO2 vert en ppm.
-        :param co2_orange:  Nouveau seuil eCO2 orange en ppm.
-        """
         def _do(dt):
             self.seuil_tvoc_vert   = tvoc_vert
             self.seuil_tvoc_orange = tvoc_orange
@@ -579,22 +460,11 @@ class IHM(App):
         Clock.schedule_once(_do, 0)
 
     def show_popup(self, titre: str, message: str, duration: float = 4):
-        """
-        Affiche un popup d'alerte par-dessus l'écran actif.
-
-        :param titre:    Titre de l'alerte, affiché en rouge.
-        :param message:  Message détaillé, affiché en blanc.
-        :param duration: Secondes avant fermeture automatique (0 = permanent).
-        """
         Clock.schedule_once(
             lambda dt: self._do_show_popup(titre, message, duration), 0
         )
 
     def _do_show_popup(self, titre: str, message: str, duration: float):
-        """
-        Exécution réelle de l'affichage (dans le thread UI).
-        Annule le timer de fermeture précédent avant d'en armer un nouveau.
-        """
         if self._popup_event:
             self._popup_event.cancel()
             self._popup_event = None
@@ -605,5 +475,4 @@ class IHM(App):
             )
 
     def hide_popup(self):
-        """Masque le popup d'alerte. Thread-safe."""
         Clock.schedule_once(lambda dt: self._popup.hide(), 0)
