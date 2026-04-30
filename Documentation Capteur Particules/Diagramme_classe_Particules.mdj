@@ -1883,6 +1883,42 @@
 											"height": 13,
 											"text": "#_init_capteur()",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGd3X0pR/74+3c=",
+											"_parent": {
+												"$ref": "AAAAAAGdGe9+N72TWHI="
+											},
+											"model": {
+												"$ref": "AAAAAAGd3X0pQf7yKzc="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 797,
+											"top": 430,
+											"width": 247,
+											"height": 13,
+											"text": "+_detecter_pm10()",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGd3X2EQgCL2e4=",
+											"_parent": {
+												"$ref": "AAAAAAGdGe9+N72TWHI="
+											},
+											"model": {
+												"$ref": "AAAAAAGd3X2EPwCFZos="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 797,
+											"top": 445,
+											"width": 247,
+											"height": 13,
+											"text": "+_detecter_tvoc_co2()",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
@@ -1890,7 +1926,7 @@
 									"left": 792,
 									"top": 395,
 									"width": 257,
-									"height": 38
+									"height": 68
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -4835,6 +4871,22 @@
 							},
 							"name": "_init_capteur",
 							"visibility": "protected"
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGd3X0pQf7yKzc=",
+							"_parent": {
+								"$ref": "AAAAAAGdGe9+Nb2KJ5Y="
+							},
+							"name": "_detecter_pm10"
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGd3X2EPwCFZos=",
+							"_parent": {
+								"$ref": "AAAAAAGdGe9+Nb2KJ5Y="
+							},
+							"name": "_detecter_tvoc_co2"
 						}
 					]
 				},
@@ -5057,6 +5109,7 @@
 								"$ref": "AAAAAAGd2UtOxD5J9Zc="
 							},
 							"name": "CCS811_ADDR",
+							"type": "",
 							"defaultValue": "0x5A"
 						}
 					],
