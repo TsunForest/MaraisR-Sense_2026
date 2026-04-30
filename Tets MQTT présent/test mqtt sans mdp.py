@@ -25,7 +25,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 
 try:
-    # Validation stricte du certificat CA, paramètres TLS par défaut
+    # Validation stricte  du certificat CA, paramètres TLS par défaut
     client.tls_set(ca_certs=CA_CERT, cert_reqs=ssl.CERT_REQUIRED)
     client.tls_insecure_set(False)
     print(f"🔑 TLS configuré avec : {CA_CERT}")
