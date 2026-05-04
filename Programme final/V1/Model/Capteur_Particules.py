@@ -38,30 +38,18 @@ class CapteurParticules(SDS011):
         self.ser.timeout = 5
 
     def get_pm10(self) -> float:
-        """
-        Effectue une mesure PM10 complète selon la séquence recommandée :
-          1. Sortie du mode sleep (x2 pour s'assurer du réveil)
-          2. Attente de 30 s pour stabiliser le laser et le flux d'air
-          3. Requête de mesure
-          4. Remise en sleep pour économiser la durée de vie du capteur
-          5. Attente de 89 s avant la prochaine mesure possible
-             (cycle total ≈ 2 min → 0.5 mesure/min)
+        
+        # Appel sleep(False)
+        self.sleep(sleep=False)
 
-        :return: Valeur PM10 en µg/m³.
-        :raises serial.SerialException: Si le capteur ne répond pas (débranchement).
-        """
-        # Double appel sleep(False) pour être sûr que le capteur est bien réveillé
-        for _ in range(2):
-            self.sleep(sleep=False)
-
-        # Stabilisation : le laser et le ventilateur doivent tourner avant mesure
+        # Stabilisation des mesures
         time.sleep(30)
 
-        # Requête de mesure : retourne (pm25, pm10) ou None si pas de réponse
+        # Requête de mesure
         result = self.query()
 
         if result is None:
-            # Aucune réponse dans le délai timeout → capteur probablement débranché
+            # Aucune réponse dans le délai timeout : capteur probablement débranché
             raise serial.SerialException("Pas de réponse du capteur SDS011")
 
         _, pm10 = result   # on ignore pm25, on ne garde que pm10
@@ -69,7 +57,7 @@ class CapteurParticules(SDS011):
         # Remise en veille du capteur pour économiser la durée de vie du laser
         self.sleep()
 
-        # Pause avant la prochaine mesure (cycle total ~2 min avec les 30s de wake-up)
+        # Pause avant la prochaine mesure
         time.sleep(89)
 
         return pm10
