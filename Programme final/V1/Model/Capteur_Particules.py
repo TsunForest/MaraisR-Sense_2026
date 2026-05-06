@@ -40,7 +40,8 @@ class CapteurParticules(SDS011):
     def get_pm10(self) -> float:
         
         # Appel sleep(False)
-        self.sleep(sleep=False)
+        for _ in range(2):
+            self.sleep(sleep=False)
 
         # Stabilisation des mesures
         time.sleep(30)
