@@ -30,7 +30,7 @@ mock_sds011_module.SDS011 = FakeSDS011Base
 sys.modules['sds011'] = mock_sds011_module
 
 # Import APRÈS injection du stub
-from Capteur_Particules import CapteurParticules  # noqa: E402
+from ..Model.Capteur_Particules import CapteurParticules  # noqa: E402
 
 
 # ─────────────────────────────────────────────────────────────────────────────

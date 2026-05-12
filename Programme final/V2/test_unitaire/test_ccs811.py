@@ -16,7 +16,7 @@ mock_pinpong.board.I2C.return_value = mock_i2c_instance
 sys.modules['pinpong']              = mock_pinpong
 sys.modules['pinpong.board']        = mock_pinpong.board
 
-from Ccs811 import Ccs811  # noqa: E402
+from ..Model.Ccs811 import Ccs811  # noqa: E402
 
 
 # ─────────────────────────────────────────────────────────────────────────────

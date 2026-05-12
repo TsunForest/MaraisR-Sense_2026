@@ -30,7 +30,7 @@ mock_ssl = MagicMock()
 mock_ssl.PROTOCOL_TLS = 2
 sys.modules['ssl'] = mock_ssl
 
-from MQTTClient import MQTTClient  # noqa: E402
+from ..Model.MQTTClient import MQTTClient  # noqa: E402
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -51,8 +51,8 @@ def client():
             broker="test.broker",
             port=8883,
             topic_base="test/sondes/",
-            username="user",
-            password="pass",
+            username="marais2026",
+            password="hyrome49#",
             ca_cert="ca.crt"
         )
 
@@ -106,7 +106,7 @@ class TestPublishPm10:
         # Le payload est le 2e argument positionnel
         args = mock_client_ins.publish.call_args[0]
         payload = json.loads(args[1])
-        assert payload["mesure"]["PM10"] == pytest.approx(77.3)
+        assert payload["mesure"]["PM 10"] == pytest.approx(77.3)
 
     def test_payload_contient_timestamp(self, client):
         client.publish_pm10(10.0)

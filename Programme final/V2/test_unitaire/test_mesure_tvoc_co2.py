@@ -35,7 +35,7 @@ def _make_mesure(connected=True, run_in_elapsed=True,
 # Import après stubs
 # ─────────────────────────────────────────────────────────────────────────────
 
-from MesureTVOC_CO2 import MesureTVOC_CO2  # noqa: E402
+from ..Model.MesureTVOC_CO2 import MesureTVOC_CO2  # noqa: E402
 
 
 # ─────────────────────────────────────────────────────────────────────────────
