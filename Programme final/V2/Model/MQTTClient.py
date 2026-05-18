@@ -36,8 +36,8 @@ class MQTTClient:
                  broker="marais2026.btssn.ovh",
                  port=8883,
                  topic_base="marais/sondes/",
-                 username="marais2026",
-                 password="hyrome49#",
+                 username="*****",
+                 password="*****",
                  ca_cert="ca.crt",
                  certfile=None,
                  keyfile=None):
@@ -112,17 +112,49 @@ class MQTTClient:
         Callback paho déclenché à la réception d'un message sur un topic abonné.
         S'exécute dans le thread réseau interne de paho.
         Ne pas toucher à l'UI directement depuis cette méthode.
+
+        Format attendu du payload (tous les champs sont optionnels) :
+          {
+            "Seuils": {
+              "pm10_alerte_seuil":  150.0,
+              "pm10_danger_seuil":  200.0,
+              "tvoc_alerte_seuil":  300.0,
+              "tvoc_danger_seuil": 1000.0,
+              "co2_alerte_seuil":   800.0,
+              "co2_danger_seuil":  1500.0
+            }
+          }
+        Les champs absents valent None : le Controller utilisera alors la valeur
+        courante de l'IHM comme fallback pour ce seuil.
         """
         if self._cb_seuils is None:
             return
 
         try:
-            data = json.loads(msg.payload.decode('utf-8'))
-            sv   = float(data['seuil_vert'])
-            so   = float(data['seuil_orange'])
-            print(f"Seuils reçus via MQTT : vert={sv}, orange={so}")
-            # Le callback Controller appellera ensuite ihm.update_seuils() (thread-safe)
-            self._cb_seuils(sv, so)
+            data   = json.loads(msg.payload.decode('utf-8'))
+            seuils = data['Seuils']
+
+            def _get(key):
+                return float(seuils[key]) if key in seuils else None
+
+            pm10_alerte = _get('pm10_alerte_seuil')
+            pm10_danger = _get('pm10_danger_seuil')
+            tvoc_alerte = _get('tvoc_alerte_seuil')
+            tvoc_danger = _get('tvoc_danger_seuil')
+            co2_alerte  = _get('co2_alerte_seuil')
+            co2_danger  = _get('co2_danger_seuil')
+
+            print(
+                f"Seuils reçus via MQTT — "
+                f"PM10: alerte={pm10_alerte}, danger={pm10_danger} | "
+                f"TVOC: alerte={tvoc_alerte}, danger={tvoc_danger} | "
+                f"CO2: alerte={co2_alerte}, danger={co2_danger}"
+            )
+
+            self._cb_seuils(pm10_alerte, pm10_danger,
+                            tvoc_alerte, tvoc_danger,
+                            co2_alerte,  co2_danger)
+
         except (KeyError, ValueError, json.JSONDecodeError) as e:
             print(f"Erreur parsing seuils MQTT : {e} | payload : {msg.payload}")
 
@@ -195,15 +227,16 @@ class MQTTClient:
 
     def subscribe_seuils(self, topic: str, callback):
         """
-        S'abonne au topic MQTT de configuration des seuils PM10.
-        A chaque message, callback(seuil_vert: float, seuil_orange: float)
-        est appelé dans le thread réseau paho.
+        S'abonne au topic MQTT de configuration des seuils.
+        A chaque message, callback est appelé avec 6 arguments (tous optionnels) :
+          callback(pm10_alerte, pm10_danger,
+                   tvoc_alerte, tvoc_danger,
+                   co2_alerte,  co2_danger)
+        Chaque argument vaut None si le champ correspondant est absent du payload.
+        Le Controller utilise alors la valeur courante de l'IHM comme fallback.
 
-        Si cette méthode n'est pas appelée, les seuils par défaut de l'IHM
-        restent actifs.
-
-        :param topic:    Topic MQTT d'écoute (ex. "marais/seuils/config").
-        :param callback: Fonction appelée avec (seuil_vert, seuil_orange).
+        :param topic:    Topic MQTT d'écoute (ex. "marais/sondes/seuils").
+        :param callback: Fonction appelée avec les 6 valeurs décrites ci-dessus.
         """
         self._topic_seuils = topic
         self._cb_seuils    = callback

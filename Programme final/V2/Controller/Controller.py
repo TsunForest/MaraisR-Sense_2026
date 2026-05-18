@@ -35,7 +35,7 @@ from View  import IHM
 
 AUTO_RETURN_DELAY   = 60    # secondes avant retour automatique vers les mesures
 ALTERNANCE_INTERVAL = 10    # secondes entre deux changements d'écran automatiques
-TOPIC_SEUILS        = "marais/seuils/config"
+TOPIC_SEUILS        = "marais/sondes/seuils"  # topic MQTT pour recevoir les seuils PM10 et TVOC/CO2
 
 
 class Controller:
@@ -130,9 +130,40 @@ class Controller:
             )
             return None
 
-    def _on_seuils_recus(self, seuil_vert: float, seuil_orange: float):
-        print(f"Seuils PM10 mis a jour : vert={seuil_vert}, orange={seuil_orange}")
-        self.ihm.update_seuils(seuil_vert, seuil_orange)
+    def _on_seuils_recus(self, pm10_alerte, pm10_danger,
+                         tvoc_alerte, tvoc_danger,
+                         co2_alerte,  co2_danger):
+        """
+        Callback appelé par MQTTClient à la réception d'un message de seuils.
+        Chaque argument peut être un float ou None si absent du payload.
+        Pour toute valeur absente, on conserve le seuil courant de l'IHM.
+        Les trois groupes (PM10, TVOC, CO2) sont indépendants : un seul champ
+        suffit pour déclencher la mise à jour du groupe concerné.
+        """
+        # ── PM10 ──────────────────────────────────────────────────────────────
+        if pm10_alerte is not None or pm10_danger is not None:
+            sv = pm10_alerte if pm10_alerte is not None else self.ihm.seuil_vert
+            so = pm10_danger if pm10_danger is not None else self.ihm.seuil_orange
+            print(f"Seuils PM10 mis a jour : alerte={sv}, danger={so}")
+            self.ihm.update_seuils(sv, so)
+
+        # ── TVOC ──────────────────────────────────────────────────────────────
+        if tvoc_alerte is not None or tvoc_danger is not None:
+            tv = tvoc_alerte if tvoc_alerte is not None else self.ihm.seuil_tvoc_vert
+            to = tvoc_danger if tvoc_danger is not None else self.ihm.seuil_tvoc_orange
+            cv = self.ihm.seuil_co2_vert
+            co = self.ihm.seuil_co2_orange
+            print(f"Seuils TVOC mis a jour : alerte={tv}, danger={to}")
+            self.ihm.update_seuils_capteur2(tv, to, cv, co)
+
+        # ── CO2 ───────────────────────────────────────────────────────────────
+        if co2_alerte is not None or co2_danger is not None:
+            tv = self.ihm.seuil_tvoc_vert
+            to = self.ihm.seuil_tvoc_orange
+            cv = co2_alerte if co2_alerte is not None else self.ihm.seuil_co2_vert
+            co = co2_danger if co2_danger is not None else self.ihm.seuil_co2_orange
+            print(f"Seuils CO2 mis a jour : alerte={cv}, danger={co}")
+            self.ihm.update_seuils_capteur2(tv, to, cv, co)
 
     # ══════════════════════════════════════════════════════════════════════════
     # Alternance automatique entre les écrans
@@ -267,6 +298,7 @@ class Controller:
         print("Boucle PM10 demarree")
         while True:
             try:
+                
                 pm10 = self.capteur_pm10.get_pm10()
                 print(f"PM10 : {pm10:.1f} ug/m3")
                 self.ihm.hide_popup()
@@ -279,6 +311,8 @@ class Controller:
                         print(f"MQTT publication PM10 echouee : {e}")
                         self.ihm.show_popup("Envoi MQTT echoue", str(e)[:80], duration=5)
                         self.mqtt = self._init_mqtt()
+                
+                time.sleep(89)
 
             except serial.SerialException as e:
                 print(f"Capteur PM10 debranche : {e}")

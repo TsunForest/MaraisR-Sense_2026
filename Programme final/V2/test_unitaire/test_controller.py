@@ -203,12 +203,12 @@ class TestEcranInitial:
 class TestOnSeuilsRecus:
     def test_update_seuils_appele(self, ctrl_deux):
         ctrl, ihm, _ = ctrl_deux
-        ctrl._on_seuils_recus(25.0, 50.0)
+        ctrl._on_seuils_recus(25.0, 50.0, None, None, None, None)
         ihm.update_seuils.assert_called_with(25.0, 50.0)
 
     def test_valeurs_transmises_correctement(self, ctrl_deux):
         ctrl, ihm, _ = ctrl_deux
-        ctrl._on_seuils_recus(10.5, 30.2)
+        ctrl._on_seuils_recus(10.5, 30.2, None, None, None, None)
         ihm.update_seuils.assert_called_once_with(10.5, 30.2)
 
 

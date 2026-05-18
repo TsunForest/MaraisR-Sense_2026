@@ -167,8 +167,8 @@ class TestPublishTvocCo2:
 class TestSubscribeSeuils:
     def test_abonnement_au_topic(self, client):
         cb = MagicMock()
-        client.subscribe_seuils("marais/seuils/config", cb)
-        mock_client_ins.subscribe.assert_called_with("marais/seuils/config")
+        client.subscribe_seuils("marais/sondes/seuils", cb)
+        mock_client_ins.subscribe.assert_called_with("marais/sondes/seuils")
 
     def test_callback_enregistre(self, client):
         cb = MagicMock()
@@ -193,7 +193,7 @@ class TestOnMessage:
     def test_callback_appele_avec_bons_seuils(self, client):
         cb = MagicMock()
         client._cb_seuils = cb
-        msg = self._make_msg({"seuil_vert": 25.0, "seuil_orange": 50.0})
+        msg = self._make_msg({"pm10_alerte_seuil": 25.0, "pm10_danger_seuil": 50.0})
         client._on_message(None, None, msg)
         cb.assert_called_once_with(25.0, 50.0)
 

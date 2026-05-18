@@ -58,9 +58,6 @@ class CapteurParticules(SDS011):
         # Remise en veille du capteur pour économiser la durée de vie du laser
         self.sleep()
 
-        # Pause avant la prochaine mesure
-        time.sleep(89)
-
         return pm10
 
     def reconnecter(self):

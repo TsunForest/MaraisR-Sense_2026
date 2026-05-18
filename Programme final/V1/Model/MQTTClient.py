@@ -36,8 +36,8 @@ class MQTTClient:
                  broker="marais2026.btssn.ovh",
                  port=8883,
                  topic_base="marais/sondes/",
-                 username="marais2026",
-                 password="hyrome49#",
+                 username="*****",
+                 password="*****",
                  ca_cert="ca.crt",
                  certfile=None,
                  keyfile=None):
