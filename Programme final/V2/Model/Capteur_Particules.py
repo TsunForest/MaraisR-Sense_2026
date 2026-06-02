@@ -53,7 +53,7 @@ class CapteurParticules(SDS011):
             # Aucune réponse dans le délai timeout : capteur probablement débranché
             raise serial.SerialException("Pas de réponse du capteur SDS011")
 
-        _, pm10 = result   # on ignore pm25, on ne garde que pm10
+        _, pm10 = result   # on ignore pm2.5, on ne garde que pm10
 
         # Remise en veille du capteur pour économiser la durée de vie du laser
         self.sleep()

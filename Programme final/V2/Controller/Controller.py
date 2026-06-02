@@ -360,7 +360,7 @@ class Controller:
                         self.ihm.show_popup("Envoi MQTT echoue", str(e)[:80], duration=5)
                         self.mqtt = self._init_mqtt()
 
-                time.sleep(30)
+                time.sleep(60)
 
             except Exception as e:
                 print(f"Erreur inattendue boucle TVOC/CO2 : {e}")
@@ -391,3 +391,4 @@ class Controller:
             if self.mqtt:
                 self.mqtt.disconnect()
             print("Fin du programme")
+            
