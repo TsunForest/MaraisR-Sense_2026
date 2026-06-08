@@ -147,22 +147,22 @@ class Controller:
             print(f"Seuils PM10 mis a jour : alerte={sv}, danger={so}")
             self.ihm.update_seuils(sv, so)
 
-        # ── TVOC ──────────────────────────────────────────────────────────────
-        if tvoc_alerte is not None or tvoc_danger is not None:
+        # ── TVOC + CO2 (un seul appel pour éviter la race condition Clock) ────
+        # Si les deux blocs faisaient chacun un appel séparé à
+        # update_seuils_capteur2, le second lirait des valeurs stale pour
+        # l'autre capteur (le Clock n'ayant pas encore exécuté le premier
+        # appel) et écraserait les nouvelles valeurs avec les anciennes.
+        if (tvoc_alerte is not None or tvoc_danger is not None or
+                co2_alerte is not None or co2_danger is not None):
             tv = tvoc_alerte if tvoc_alerte is not None else self.ihm.seuil_tvoc_vert
             to = tvoc_danger if tvoc_danger is not None else self.ihm.seuil_tvoc_orange
-            cv = self.ihm.seuil_co2_vert
-            co = self.ihm.seuil_co2_orange
-            print(f"Seuils TVOC mis a jour : alerte={tv}, danger={to}")
-            self.ihm.update_seuils_capteur2(tv, to, cv, co)
-
-        # ── CO2 ───────────────────────────────────────────────────────────────
-        if co2_alerte is not None or co2_danger is not None:
-            tv = self.ihm.seuil_tvoc_vert
-            to = self.ihm.seuil_tvoc_orange
-            cv = co2_alerte if co2_alerte is not None else self.ihm.seuil_co2_vert
-            co = co2_danger if co2_danger is not None else self.ihm.seuil_co2_orange
-            print(f"Seuils CO2 mis a jour : alerte={cv}, danger={co}")
+            cv = co2_alerte  if co2_alerte  is not None else self.ihm.seuil_co2_vert
+            co = co2_danger  if co2_danger  is not None else self.ihm.seuil_co2_orange
+            print(
+                f"Seuils TVOC/CO2 mis a jour : "
+                f"tvoc_alerte={tv}, tvoc_danger={to}, "
+                f"co2_alerte={cv}, co2_danger={co}"
+            )
             self.ihm.update_seuils_capteur2(tv, to, cv, co)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -360,7 +360,7 @@ class Controller:
                         self.ihm.show_popup("Envoi MQTT echoue", str(e)[:80], duration=5)
                         self.mqtt = self._init_mqtt()
 
-                time.sleep(60)
+                time.sleep(30)
 
             except Exception as e:
                 print(f"Erreur inattendue boucle TVOC/CO2 : {e}")
@@ -391,4 +391,3 @@ class Controller:
             if self.mqtt:
                 self.mqtt.disconnect()
             print("Fin du programme")
-            

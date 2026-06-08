@@ -36,8 +36,8 @@ class MQTTClient:
                  broker="marais2026.btssn.ovh",
                  port=8883,
                  topic_base="marais/sondes/",
-                 username="*****",
-                 password="*****",
+                 username="marais2026",
+                 password="hyrome49#",
                  ca_cert="ca.crt",
                  certfile=None,
                  keyfile=None):
@@ -113,36 +113,31 @@ class MQTTClient:
         S'exécute dans le thread réseau interne de paho.
         Ne pas toucher à l'UI directement depuis cette méthode.
 
-        Format attendu du payload (tous les champs sont optionnels) :
+        Format attendu du payload (tous les capteurs et toutes les valeurs
+        sont optionnels — seules les clés présentes seront mises à jour) :
           {
-            "Seuils": {
-              "pm10_alerte_seuil":  150.0,
-              "pm10_danger_seuil":  200.0,
-              "tvoc_alerte_seuil":  300.0,
-              "tvoc_danger_seuil": 1000.0,
-              "co2_alerte_seuil":   800.0,
-              "co2_danger_seuil":  1500.0
-            }
+            "PM 10": {"valeur_alerte_seuil": 20.0,   "valeur_danger_seuil": 50.0},
+            "TVOC":  {"valeur_alerte_seuil": 1000.0, "valeur_danger_seuil": 10000.0},
+            "ECO2":  {"valeur_alerte_seuil": 1000.0, "valeur_danger_seuil": 2004.0}
           }
-        Les champs absents valent None : le Controller utilisera alors la valeur
-        courante de l'IHM comme fallback pour ce seuil.
         """
         if self._cb_seuils is None:
             return
 
         try:
-            data   = json.loads(msg.payload.decode('utf-8'))
-            seuils = data['Seuils']
+            data = json.loads(msg.payload.decode('utf-8'))
 
-            def _get(key):
-                return float(seuils[key]) if key in seuils else None
+            def _get(capteur, cle):
+                """Retourne float si présent, None sinon."""
+                bloc = data.get(capteur, {})
+                return float(bloc[cle]) if cle in bloc else None
 
-            pm10_alerte = _get('pm10_alerte_seuil')
-            pm10_danger = _get('pm10_danger_seuil')
-            tvoc_alerte = _get('tvoc_alerte_seuil')
-            tvoc_danger = _get('tvoc_danger_seuil')
-            co2_alerte  = _get('co2_alerte_seuil')
-            co2_danger  = _get('co2_danger_seuil')
+            pm10_alerte = _get('PM 10', 'valeur_alerte_seuil')
+            pm10_danger = _get('PM 10', 'valeur_danger_seuil')
+            tvoc_alerte = _get('TVOC',  'valeur_alerte_seuil')
+            tvoc_danger = _get('TVOC',  'valeur_danger_seuil')
+            co2_alerte  = _get('ECO2',  'valeur_alerte_seuil')
+            co2_danger  = _get('ECO2',  'valeur_danger_seuil')
 
             print(
                 f"Seuils reçus via MQTT — "
@@ -155,7 +150,7 @@ class MQTTClient:
                             tvoc_alerte, tvoc_danger,
                             co2_alerte,  co2_danger)
 
-        except (KeyError, ValueError, json.JSONDecodeError) as e:
+        except (ValueError, json.JSONDecodeError) as e:
             print(f"Erreur parsing seuils MQTT : {e} | payload : {msg.payload}")
 
     def _connect(self):
